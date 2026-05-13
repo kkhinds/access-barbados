@@ -1,0 +1,186 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* 17px base — better for low-vision and older users; respects browser zoom */
+    font-size: 17px;
+  }
+
+  @media (min-width: 1024px) {
+    html {
+      font-size: 18px;
+    }
+  }
+
+  body {
+    @apply bg-sand-50 text-ink-900 antialiased dark:bg-ink-900 dark:text-sand-100;
+    font-feature-settings: "ss01", "cv11";
+    line-height: 1.6;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  @media (max-width: 767px) {
+    body {
+      padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
+    }
+  }
+
+  /* Respect users who prefer reduced motion (vestibular disorders, migraines, etc.) */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* High-contrast 3px focus ring with offset, visible on every background */
+  :focus-visible {
+    outline: 3px solid #0e7a76;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* On dark backgrounds, use a lighter ring */
+  .on-dark :focus-visible,
+  footer :focus-visible {
+    outline-color: #f0dfb1;
+  }
+
+  /* OS dark mode: light focus ring everywhere */
+  @media (prefers-color-scheme: dark) {
+    :focus-visible {
+      outline-color: #f0dfb1;
+    }
+  }
+
+  ::selection {
+    @apply bg-turquoise-200 text-ink-900;
+  }
+
+  /* Prevent iOS Safari from auto-zooming on input focus (needs >=16px) */
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+
+  /* Skip-to-content link: visually hidden until focused */
+  .skip-link {
+    position: absolute;
+    left: 0.5rem;
+    top: -3rem;
+    z-index: 100;
+    background: #0c615f;
+    color: white;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: top 0.15s ease-in-out;
+  }
+  .skip-link:focus {
+    top: 0.5rem;
+  }
+  @media (prefers-color-scheme: dark) {
+    .skip-link {
+      background: #f0dfb1;
+      color: #0a1820;
+    }
+  }
+
+  /* Honor Windows High Contrast Mode / forced colors */
+  @media (forced-colors: active) {
+    .btn,
+    .btn-primary,
+    .btn-secondary,
+    .btn-coral {
+      border: 1px solid CanvasText;
+    }
+    :focus-visible {
+      outline: 3px solid Highlight;
+    }
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 sm:px-6 py-3 text-base font-semibold transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2;
+    min-height: 48px;
+  }
+
+  .btn-primary {
+    /* turquoise-700 on white text: ~7.2:1 passes AAA. Dark: turquoise-500 on ink-900 ~6.4:1 */
+    @apply btn bg-turquoise-700 text-white shadow-soft hover:bg-turquoise-800 active:translate-y-px
+      dark:bg-turquoise-500 dark:text-ink-900 dark:hover:bg-turquoise-400;
+  }
+
+  .btn-secondary {
+    /* turquoise-800 text on white: ~10:1 AAA. Dark: sand-100 text on ink-800 ~13:1 */
+    @apply btn bg-white text-turquoise-800 border-2 border-turquoise-700 hover:bg-turquoise-50
+      dark:bg-ink-800 dark:text-sand-100 dark:border-turquoise-400 dark:hover:bg-ink-700;
+  }
+
+  .btn-coral {
+    /* coral-600 on white text: ~4.9:1 AA. Dark: coral-400 stays vivid on ink-900 */
+    @apply btn bg-coral-600 text-white shadow-soft hover:bg-coral-700 active:translate-y-px
+      dark:bg-coral-500 dark:hover:bg-coral-400;
+  }
+
+  .section {
+    @apply py-14 sm:py-20 lg:py-24;
+  }
+
+  .eyebrow {
+    /* turquoise-800 on light, turquoise-300 on dark — both pass AA */
+    @apply inline-block text-xs sm:text-sm font-semibold uppercase tracking-[0.18em] text-turquoise-800
+      dark:text-turquoise-300;
+  }
+
+  .h-display {
+    @apply font-display text-[1.75rem] leading-[1.15] sm:text-4xl lg:text-5xl font-bold tracking-tight text-ink-900
+      dark:text-sand-100;
+  }
+
+  .card {
+    @apply bg-white rounded-xl2 shadow-card p-5 sm:p-7 lg:p-8 border border-sand-100
+      dark:bg-ink-800 dark:border-ink-700 dark:shadow-none;
+  }
+
+  .field-label {
+    @apply block text-base font-semibold text-ink-900 mb-2
+      dark:text-sand-100;
+  }
+
+  .field-input {
+    /* 2px border for visibility. Dark: ink-800 surface with sand text */
+    @apply block w-full rounded-xl border-2 border-ink-600/40 bg-white px-4 py-3 text-base text-ink-900 placeholder:text-ink-600 shadow-sm transition focus:border-turquoise-700 focus:outline-none focus:ring-2 focus:ring-turquoise-700/40
+      dark:bg-ink-900 dark:border-ink-700 dark:text-sand-100 dark:placeholder:text-ink-400 dark:focus:border-turquoise-400 dark:focus:ring-turquoise-400/30;
+    min-height: 48px;
+  }
+
+  .field-input:disabled {
+    @apply bg-sand-50 text-ink-600 cursor-not-allowed
+      dark:bg-ink-800 dark:text-ink-400;
+  }
+}

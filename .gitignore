@@ -1,0 +1,20 @@
+node_modules
+.next
+out
+build
+dist
+*.tsbuildinfo
+
+.env
+.env.local
+.env*.local
+
+.DS_Store
+*.log
+npm-debug.log*
+
+.vercel
+next-env.d.ts
+
+# Claude Code project-local state
+.claude/
