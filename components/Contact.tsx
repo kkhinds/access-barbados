@@ -9,17 +9,18 @@ export default function Contact() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState<string>("");
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("submitting");
     setErrorMsg("");
 
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
     const get = (k: string) => (formData.get(k)?.toString() ?? "").trim();
 
     if (get("company")) {
       setStatus("success");
-      e.currentTarget.reset();
+      form.reset();
       return;
     }
 
@@ -31,6 +32,37 @@ export default function Contact() {
       return;
     }
 
+    const endpoint = process.env.NEXT_PUBLIC_BOOKING_ENDPOINT;
+
+    if (endpoint) {
+      try {
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            company: get("company"),
+            name,
+            phone,
+            email: get("email"),
+            notes: get("notes"),
+            source: "web", // contact form rides through the same pipe as bookings
+          }),
+        });
+        if (!res.ok) {
+          const data = (await res.json().catch(() => ({}))) as { error?: string };
+          throw new Error(data.error ?? "Your message didn't go through. Please try again or call us.");
+        }
+        setStatus("success");
+        form.reset();
+        return;
+      } catch (err) {
+        setStatus("error");
+        setErrorMsg(err instanceof Error ? err.message : "Something went wrong. Please call us.");
+        return;
+      }
+    }
+
+    // Fallback: mailto until admin endpoint is live.
     const lines = [
       `Name: ${name}`,
       `Phone: ${phone}`,
@@ -43,7 +75,7 @@ export default function Contact() {
     const mailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
     setStatus("success");
-    e.currentTarget.reset();
+    form.reset();
     window.location.href = mailto;
   }
 

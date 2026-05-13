@@ -27,9 +27,20 @@ jobs:
 
       - run: npm ci
 
+      - name: Sync services + contact from admin backend
+        env:
+          # When the admin is live, set ADMIN_SYNC_URL repository variable to
+          # e.g. https://access-barbados-admin.vercel.app/api/public/sync
+          # If unset, the script logs a warning and uses the JSON already in the repo.
+          ADMIN_SYNC_URL: ${{ vars.ADMIN_SYNC_URL }}
+        run: node scripts/sync-from-admin.mjs
+
       - name: Build (static export with GitHub Pages basePath)
         env:
           GITHUB_PAGES: "true"
+          # When set, the marketing booking form POSTs here instead of opening mailto.
+          # e.g. https://access-barbados-admin.vercel.app/api/public/bookings
+          NEXT_PUBLIC_BOOKING_ENDPOINT: ${{ vars.NEXT_PUBLIC_BOOKING_ENDPOINT }}
         run: npm run build
 
       - name: Add .nojekyll

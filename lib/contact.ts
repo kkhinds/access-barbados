@@ -1,18 +1,34 @@
-// Placeholder contact details — replace these with real values before launch.
-// Search the codebase for REPLACE_ME to find any remaining placeholders.
+// Contact details. Sourced from lib/contact.json which is generated at build time
+// from the admin's /api/public/sync endpoint. Falls back to placeholders if the
+// JSON file is missing (e.g. very first build before the backend exists).
+import contactJson from "./contact.json" with { type: "json" };
 
-export const CONTACT = {
-  // Format examples: "+1 (246) 555-0123"
+type ContactShape = {
+  phoneDisplay: string;
+  phoneTel: string;
+  whatsApp: string;
+  email: string;
+  addressLine: string;
+  businessHours: string;
+};
+
+const fallback: ContactShape = {
   phoneDisplay: "REPLACE_ME_PHONE_DISPLAY",
-  // tel: link — digits only, with country code, no spaces. e.g. "+12465550123"
   phoneTel: "REPLACE_ME_PHONE_TEL",
-  // WhatsApp number for wa.me link — digits only, no plus. e.g. "12465550123"
   whatsApp: "REPLACE_ME_WHATSAPP",
-  // Public-facing email
   email: "REPLACE_ME_EMAIL@example.com",
-  // Optional address line shown in footer
   addressLine: "Bridgetown, Barbados",
   businessHours: "Daily, 6:00 AM – 10:00 PM",
+};
+
+const loaded = contactJson as Partial<ContactShape>;
+export const CONTACT: ContactShape = {
+  phoneDisplay: loaded.phoneDisplay || fallback.phoneDisplay,
+  phoneTel: loaded.phoneTel || fallback.phoneTel,
+  whatsApp: loaded.whatsApp || fallback.whatsApp,
+  email: loaded.email || fallback.email,
+  addressLine: loaded.addressLine || fallback.addressLine,
+  businessHours: loaded.businessHours || fallback.businessHours,
 };
 
 export const waMessage = encodeURIComponent(

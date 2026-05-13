@@ -21,18 +21,19 @@ export default function BookingForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState<string>("");
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("submitting");
     setErrorMsg("");
 
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
     const get = (k: string) => (formData.get(k)?.toString() ?? "").trim();
 
-    // Bot honeypot: silently succeed without opening a mail client.
+    // Bot honeypot: silently succeed without doing anything.
     if (get("company")) {
       setStatus("success");
-      e.currentTarget.reset();
+      form.reset();
       return;
     }
 
@@ -44,7 +45,47 @@ export default function BookingForm() {
       return;
     }
 
-    const mobility = formData.getAll("mobility").join(", ");
+    const mobility = formData.getAll("mobility").map((v) => v.toString());
+    const endpoint = process.env.NEXT_PUBLIC_BOOKING_ENDPOINT;
+
+    // Preferred path: POST to the admin API when configured (real persistence).
+    if (endpoint) {
+      try {
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            company: get("company"),
+            name,
+            phone,
+            email: get("email"),
+            pickupDate: get("pickupDate"),
+            pickupTime: get("pickupTime"),
+            pickupLocation: get("pickupLocation"),
+            dropoffLocation: get("dropoffLocation"),
+            serviceType: get("serviceType"),
+            passengers: get("passengers"),
+            mobility,
+            notes: get("notes"),
+          }),
+        });
+
+        if (!res.ok) {
+          const data = (await res.json().catch(() => ({}))) as { error?: string };
+          throw new Error(data.error ?? "Your request didn't go through. Please try again or call us.");
+        }
+
+        setStatus("success");
+        form.reset();
+        return;
+      } catch (err) {
+        setStatus("error");
+        setErrorMsg(err instanceof Error ? err.message : "Something went wrong. Please call us.");
+        return;
+      }
+    }
+
+    // Fallback path: no backend configured yet — open the visitor's email client.
     const lines = [
       `Name: ${name}`,
       `Phone: ${phone}`,
@@ -55,7 +96,7 @@ export default function BookingForm() {
       get("dropoffLocation") && `Drop-off: ${get("dropoffLocation")}`,
       get("serviceType") && `Service: ${get("serviceType")}`,
       get("passengers") && `Passengers: ${get("passengers")}`,
-      mobility && `Mobility needs: ${mobility}`,
+      mobility.length > 0 && `Mobility needs: ${mobility.join(", ")}`,
       get("notes") && `Notes: ${get("notes")}`,
     ].filter(Boolean);
 
@@ -64,8 +105,7 @@ export default function BookingForm() {
     const mailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
     setStatus("success");
-    e.currentTarget.reset();
-    // Open the visitor's email client with their request pre-filled.
+    form.reset();
     window.location.href = mailto;
   }
 
