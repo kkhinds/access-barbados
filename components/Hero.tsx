@@ -30,8 +30,8 @@ export default function Hero() {
             <p className="mt-5 sm:mt-6 text-base sm:text-xl text-ink-700 leading-relaxed max-w-2xl
               dark:text-sand-100">
               Reliable, accessible transport for Barbadians who need a little extra care getting
-              around. Rides to the doctor, the pharmacy, the supermarket, or wherever the day takes
-              you. Schedule in advance and ride at ease.
+              around. Rides to the doctor, the care home, the pharmacy, the supermarket, or
+              wherever the day takes you. Schedule in advance and ride at ease.
             </p>
 
             <div className="mt-7 sm:mt-8 grid grid-cols-1 sm:flex sm:flex-wrap gap-3">

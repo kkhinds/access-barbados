@@ -6,14 +6,14 @@ import { CONTACT } from "@/lib/contact";
 type Status = "idle" | "submitting" | "success" | "error";
 
 const serviceOptions = [
+  "Medical appointment",
+  "Senior care home visit / pickup",
+  "Medication pickup & drop-off",
+  "Physiotherapy",
+  "Supermarket / shopping",
+  "Family outing / day trip",
   "Airport transfer",
   "Cruise terminal pickup",
-  "Hotel / villa transfer",
-  "Medical appointment",
-  "Physiotherapy",
-  "Medication pickup & drop-off",
-  "Supermarket / shopping",
-  "Sightseeing / day trip",
   "Other",
 ];
 

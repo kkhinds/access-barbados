@@ -16,12 +16,12 @@ const services: Service[] = [
     ),
   },
   {
-    title: "Physiotherapy & Rehab",
+    title: "Senior Care Home Visits",
     description:
-      "Set up your weekly physio rides once and we’ll handle the rest. Same time, same driver where we can. No re-explaining yourself every Tuesday.",
+      "Visiting Mum at the care home? Bringing Dad home for Sunday lunch? We handle pickups to and from senior homes across the island, with patient drivers and accessible vehicles.",
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-        <path d="M4 4h3v16H4V4Zm13 0h3v16h-3V4ZM8 11h8v2H8v-2Z" />
+        <path d="M3 21V7l9-4 9 4v14H3Zm6-2h2v-3H9v3Zm4 0h2v-3h-2v3Z" />
       </svg>
     ),
   },
@@ -32,6 +32,16 @@ const services: Service[] = [
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
         <path d="M5 4h14v3H5V4Zm0 5h14l-1 11H6L5 9Zm5 3v6h4v-6h-4Z" />
+      </svg>
+    ),
+  },
+  {
+    title: "Physiotherapy & Rehab",
+    description:
+      "Set up your weekly physio rides once and we’ll handle the rest. Same time, same driver where we can. No re-explaining yourself every Tuesday.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+        <path d="M4 4h3v16H4V4Zm13 0h3v16h-3V4ZM8 11h8v2H8v-2Z" />
       </svg>
     ),
   },
@@ -72,16 +82,6 @@ const services: Service[] = [
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
         <path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1L15 22v-1.5L13 19v-5.5L21 16Z" />
-      </svg>
-    ),
-  },
-  {
-    title: "Hotel & Villa Coordination",
-    description:
-      "Got family visiting? We’ll coordinate with their hotel or villa for accessible pickups across the island, so you don’t have to play dispatcher.",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-        <path d="M3 21V7l9-4 9 4v14H3Zm6-2h2v-3H9v3Zm4 0h2v-3h-2v3Z" />
       </svg>
     ),
   },
