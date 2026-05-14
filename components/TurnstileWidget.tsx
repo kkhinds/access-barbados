@@ -20,11 +20,22 @@ declare global {
       remove: (widgetId: string) => void;
       execute: (widgetId?: string) => void;
     };
-    onloadTurnstileCallback?: () => void;
   }
 }
 
 let scriptInjected = false;
+
+function injectScriptOnce() {
+  if (scriptInjected || typeof document === "undefined") return;
+  scriptInjected = true;
+  const script = document.createElement("script");
+  // render=explicit means CF won't auto-render — we call turnstile.render() ourselves.
+  script.src =
+    "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+  script.async = true;
+  script.defer = true;
+  document.head.appendChild(script);
+}
 
 /**
  * Cloudflare Turnstile widget. Renders a small, privacy-friendly bot check.
@@ -53,10 +64,14 @@ export default function TurnstileWidget({
   useEffect(() => {
     if (!siteKey || !containerRef.current) return;
 
+    let cancelled = false;
+    let pollTimer: ReturnType<typeof setInterval> | null = null;
+    let giveUpTimer: ReturnType<typeof setTimeout> | null = null;
+
     function render() {
-      if (!window.turnstile || !containerRef.current) return;
-      // Avoid double-rendering on hot reloads
+      if (cancelled || !window.turnstile || !containerRef.current) return;
       if (widgetIdRef.current) {
+        // Already rendered for this component instance — just reset for a fresh token.
         window.turnstile.reset(widgetIdRef.current);
         return;
       }
@@ -69,34 +84,41 @@ export default function TurnstileWidget({
       });
     }
 
+    injectScriptOnce();
+
+    // Multiple TurnstileWidget instances can mount before the script loads.
+    // Each one polls independently so they ALL render — no shared callback
+    // race condition.
     if (window.turnstile) {
       render();
     } else {
-      window.onloadTurnstileCallback = render;
-      if (!scriptInjected) {
-        scriptInjected = true;
-        const script = document.createElement("script");
-        script.src =
-          "https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit";
-        script.async = true;
-        script.defer = true;
-        document.head.appendChild(script);
-      }
+      pollTimer = setInterval(() => {
+        if (window.turnstile) {
+          if (pollTimer) clearInterval(pollTimer);
+          pollTimer = null;
+          render();
+        }
+      }, 100);
+      giveUpTimer = setTimeout(() => {
+        if (pollTimer) clearInterval(pollTimer);
+        pollTimer = null;
+      }, 15000);
     }
 
-    const widgetIdAtMount = widgetIdRef.current;
     return () => {
-      if (widgetIdAtMount && window.turnstile) {
+      cancelled = true;
+      if (pollTimer) clearInterval(pollTimer);
+      if (giveUpTimer) clearTimeout(giveUpTimer);
+      if (widgetIdRef.current && window.turnstile) {
         try {
-          window.turnstile.remove(widgetIdAtMount);
+          window.turnstile.remove(widgetIdRef.current);
         } catch {
           // ignore: widget already removed
         }
       }
       widgetIdRef.current = null;
     };
-    // We intentionally do NOT re-run on callback prop changes — the widget
-    // captures the current callbacks via closure at mount time.
+    // Callbacks captured by closure at mount; we deliberately don't re-run.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [siteKey]);
 
