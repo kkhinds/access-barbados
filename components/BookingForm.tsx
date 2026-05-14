@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { CONTACT } from "@/lib/contact";
 import TurnstileWidget from "./TurnstileWidget";
+import LocationAutocomplete, { type LocationValue } from "./LocationAutocomplete";
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
@@ -24,6 +25,8 @@ export default function BookingForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [turnstileToken, setTurnstileToken] = useState<string>("");
+  const [pickup, setPickup] = useState<LocationValue>({ name: "", lat: null, lng: null });
+  const [dropoff, setDropoff] = useState<LocationValue>({ name: "", lat: null, lng: null });
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -73,8 +76,12 @@ export default function BookingForm() {
             email: get("email"),
             pickupDate: get("pickupDate"),
             pickupTime: get("pickupTime"),
-            pickupLocation: get("pickupLocation"),
-            dropoffLocation: get("dropoffLocation"),
+            pickupLocation: pickup.name,
+            pickupLocationLat: pickup.lat,
+            pickupLocationLng: pickup.lng,
+            dropoffLocation: dropoff.name,
+            dropoffLocationLat: dropoff.lat,
+            dropoffLocationLng: dropoff.lng,
             serviceType: get("serviceType"),
             passengers: get("passengers"),
             mobility,
@@ -91,6 +98,8 @@ export default function BookingForm() {
         setStatus("success");
         form.reset();
         setTurnstileToken("");
+        setPickup({ name: "", lat: null, lng: null });
+        setDropoff({ name: "", lat: null, lng: null });
         return;
       } catch (err) {
         setStatus("error");
@@ -106,8 +115,8 @@ export default function BookingForm() {
       get("email") && `Email: ${get("email")}`,
       get("pickupDate") && `Pickup date: ${get("pickupDate")}`,
       get("pickupTime") && `Pickup time: ${get("pickupTime")}`,
-      get("pickupLocation") && `Pickup: ${get("pickupLocation")}`,
-      get("dropoffLocation") && `Drop-off: ${get("dropoffLocation")}`,
+      pickup.name && `Pickup: ${pickup.name}`,
+      dropoff.name && `Drop-off: ${dropoff.name}`,
       get("serviceType") && `Service: ${get("serviceType")}`,
       get("passengers") && `Passengers: ${get("passengers")}`,
       mobility.length > 0 && `Mobility needs: ${mobility.join(", ")}`,
@@ -219,26 +228,30 @@ export default function BookingForm() {
               </div>
 
               <div className="sm:col-span-1">
-                <label htmlFor="pickupLocation" className="field-label">
-                  Pickup location <span className="text-ink-700 font-normal">(optional)</span>
-                </label>
-                <input
+                <LocationAutocomplete
                   id="pickupLocation"
                   name="pickupLocation"
-                  className="field-input"
-                  placeholder="Home address, hospital, hotel, etc."
+                  label={
+                    <>
+                      Pickup location <span className="text-ink-700 font-normal">(optional)</span>
+                    </>
+                  }
+                  placeholder="Home address, hospital, hotel, landmark…"
+                  onChange={setPickup}
                 />
               </div>
 
               <div className="sm:col-span-1">
-                <label htmlFor="dropoffLocation" className="field-label">
-                  Drop-off location <span className="text-ink-700 font-normal">(optional)</span>
-                </label>
-                <input
+                <LocationAutocomplete
                   id="dropoffLocation"
                   name="dropoffLocation"
-                  className="field-input"
+                  label={
+                    <>
+                      Drop-off location <span className="text-ink-700 font-normal">(optional)</span>
+                    </>
+                  }
                   placeholder="Destination"
+                  onChange={setDropoff}
                 />
               </div>
 

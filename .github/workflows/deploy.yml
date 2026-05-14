@@ -45,6 +45,10 @@ jobs:
           # Cloudflare Turnstile site key. When set, forms render a verification
           # widget and require a token; when unset, forms work without bot protection.
           NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
+          # LocationIQ public token. When set, pickup + drop-off fields show a
+          # Barbados-only place autocomplete with lat/lng. When unset they're
+          # plain text inputs.
+          NEXT_PUBLIC_LOCATIONIQ_TOKEN: ${{ vars.NEXT_PUBLIC_LOCATIONIQ_TOKEN }}
         run: npm run build
 
       - name: Add .nojekyll
