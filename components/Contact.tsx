@@ -2,12 +2,16 @@
 
 import { useState } from "react";
 import { CONTACT, waMessage } from "@/lib/contact";
+import TurnstileWidget from "./TurnstileWidget";
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
 export default function Contact() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -32,6 +36,14 @@ export default function Contact() {
       return;
     }
 
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setStatus("error");
+      setErrorMsg(
+        "Please complete the verification check below the form, then try again.",
+      );
+      return;
+    }
+
     const endpoint = process.env.NEXT_PUBLIC_BOOKING_ENDPOINT;
 
     if (endpoint) {
@@ -46,6 +58,7 @@ export default function Contact() {
             email: get("email"),
             notes: get("notes"),
             source: "web", // contact form rides through the same pipe as bookings
+            turnstileToken,
           }),
         });
         if (!res.ok) {
@@ -54,6 +67,7 @@ export default function Contact() {
         }
         setStatus("success");
         form.reset();
+        setTurnstileToken("");
         return;
       } catch (err) {
         setStatus("error");
@@ -208,6 +222,15 @@ export default function Contact() {
                   Leave empty<input name="company" tabIndex={-1} autoComplete="off" />
                 </label>
               </div>
+
+              {TURNSTILE_SITE_KEY && (
+                <TurnstileWidget
+                  siteKey={TURNSTILE_SITE_KEY}
+                  onToken={(t) => setTurnstileToken(t)}
+                  onExpire={() => setTurnstileToken("")}
+                  onError={() => setTurnstileToken("")}
+                />
+              )}
 
               {status === "error" && (
                 <div

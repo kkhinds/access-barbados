@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { CONTACT } from "@/lib/contact";
+import TurnstileWidget from "./TurnstileWidget";
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -20,6 +23,7 @@ const serviceOptions = [
 export default function BookingForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -45,6 +49,14 @@ export default function BookingForm() {
       return;
     }
 
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setStatus("error");
+      setErrorMsg(
+        "Please complete the verification check below the form, then try again.",
+      );
+      return;
+    }
+
     const mobility = formData.getAll("mobility").map((v) => v.toString());
     const endpoint = process.env.NEXT_PUBLIC_BOOKING_ENDPOINT;
 
@@ -67,6 +79,7 @@ export default function BookingForm() {
             passengers: get("passengers"),
             mobility,
             notes: get("notes"),
+            turnstileToken,
           }),
         });
 
@@ -77,6 +90,7 @@ export default function BookingForm() {
 
         setStatus("success");
         form.reset();
+        setTurnstileToken("");
         return;
       } catch (err) {
         setStatus("error");
@@ -302,6 +316,17 @@ export default function BookingForm() {
                   <input name="company" tabIndex={-1} autoComplete="off" />
                 </label>
               </div>
+
+              {TURNSTILE_SITE_KEY && (
+                <div className="sm:col-span-2">
+                  <TurnstileWidget
+                    siteKey={TURNSTILE_SITE_KEY}
+                    onToken={(t) => setTurnstileToken(t)}
+                    onExpire={() => setTurnstileToken("")}
+                    onError={() => setTurnstileToken("")}
+                  />
+                </div>
+              )}
 
               {status === "error" && (
                 <div

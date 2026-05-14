@@ -41,6 +41,9 @@ jobs:
           # When set, the marketing booking form POSTs here instead of opening mailto.
           # e.g. https://access-barbados-admin.vercel.app/api/public/bookings
           NEXT_PUBLIC_BOOKING_ENDPOINT: ${{ vars.NEXT_PUBLIC_BOOKING_ENDPOINT }}
+          # Cloudflare Turnstile site key. When set, both forms render a verification
+          # widget and require a token; when unset, forms work without bot protection.
+          NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
         run: npm run build
 
       - name: Add .nojekyll
