@@ -2,14 +2,14 @@
 
 Wheelchair-accessible transportation across Barbados. Marketing site for the service.
 
-**Live preview:** https://kkhinds.github.io/access-barbados/
+**Live:** https://accessbim.com
 
 ## Tech
 
 - Next.js 15 (static export)
 - TypeScript
 - Tailwind CSS
-- Deployed to GitHub Pages via GitHub Actions
+- Deployed to GitHub Pages via GitHub Actions, custom domain `accessbim.com`
 
 ## Local development
 
@@ -23,10 +23,10 @@ Open http://localhost:3000
 ## Building the static export locally
 
 ```bash
-GITHUB_PAGES=true npm run build
+npm run build
 ```
 
-Output goes to `out/`. The `GITHUB_PAGES=true` env var sets the `basePath` to `/access-barbados` so asset URLs match the Pages deployment path. Omit it for a root-path build (useful for serving from a custom domain).
+Output goes to `out/`. The build defaults to a root-path setup, which matches the live `accessbim.com` deployment. To rebuild for the legacy `kkhinds.github.io/access-barbados/` URL, run `BASE_PATH=/access-barbados npm run build` instead.
 
 ## Replacing the placeholders before launch
 

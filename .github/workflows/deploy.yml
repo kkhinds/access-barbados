@@ -35,13 +35,14 @@ jobs:
           ADMIN_SYNC_URL: ${{ vars.ADMIN_SYNC_URL }}
         run: node scripts/sync-from-admin.mjs
 
-      - name: Build (static export with GitHub Pages basePath)
+      - name: Build (static export for custom domain accessbim.com)
         env:
-          GITHUB_PAGES: "true"
-          # When set, the marketing booking form POSTs here instead of opening mailto.
-          # e.g. https://access-barbados-admin.vercel.app/api/public/bookings
+          # Leave BASE_PATH unset for the custom domain. If you ever revert to
+          # kkhinds.github.io/access-barbados/, set BASE_PATH=/access-barbados.
+          BASE_PATH: ""
+          # Booking form POSTs here when set; otherwise falls back to mailto.
           NEXT_PUBLIC_BOOKING_ENDPOINT: ${{ vars.NEXT_PUBLIC_BOOKING_ENDPOINT }}
-          # Cloudflare Turnstile site key. When set, both forms render a verification
+          # Cloudflare Turnstile site key. When set, forms render a verification
           # widget and require a token; when unset, forms work without bot protection.
           NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
         run: npm run build
