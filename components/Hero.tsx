@@ -81,41 +81,8 @@ export default function Hero() {
             </ul>
           </div>
 
-          {/* Visual card — hidden on phones (sticky bottom bar covers these actions), shown md+ */}
-          <div className="hidden md:block lg:col-span-5">
-            <div className="relative max-w-md mx-auto lg:max-w-none">
-              <div className="card shadow-soft">
-                <div className="flex items-center gap-3 mb-5">
-                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-turquoise-100 text-turquoise-700 dark:bg-turquoise-900/40 dark:text-turquoise-300">
-                    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="currentColor" aria-hidden>
-                      <path d="M3 17v-1.5a4.5 4.5 0 0 1 4.5-4.5h9A4.5 4.5 0 0 1 21 15.5V17H3Zm2-8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1H5V9Zm-1 10h2v2H4v-2Zm14 0h2v2h-2v-2Z" />
-                    </svg>
-                  </span>
-                  <div>
-                    <div className="font-semibold text-ink-900 dark:text-sand-100">Need a lift?</div>
-                    <div className="text-sm text-ink-700 dark:text-sand-100/80">
-                      Tell us when and where. We&apos;ll call to confirm.
-                    </div>
-                  </div>
-                </div>
-                <a href="#book" className="btn-primary w-full">
-                  Schedule a Ride
-                </a>
-                <div className="mt-6 rounded-xl bg-sand-50 p-4 dark:bg-ink-900/60 dark:ring-1 dark:ring-ink-700">
-                  <div className="text-xs uppercase tracking-wider text-ink-700 font-semibold dark:text-turquoise-300">
-                    Hours
-                  </div>
-                  <div className="mt-1 text-ink-900 font-semibold leading-tight dark:text-sand-100">
-                    {CONTACT.businessHours}
-                  </div>
-                </div>
-              </div>
-              <div
-                aria-hidden
-                className="absolute -bottom-4 -right-4 -z-10 h-full w-full rounded-xl2 bg-coral-200/60 dark:bg-coral-700/20"
-              />
-            </div>
-          </div>
+          {/* Right column intentionally empty — a slot for a real photo of a
+              van or driver assisting a passenger when one becomes available. */}
         </div>
       </div>
     </section>
