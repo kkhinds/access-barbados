@@ -101,20 +101,12 @@ export default function Hero() {
                 <a href="#book" className="btn-primary w-full">
                   Schedule a Ride
                 </a>
-                <div className="mt-6 grid grid-cols-2 gap-3">
-                  <div className="rounded-xl bg-sand-50 p-4 dark:bg-ink-900/60 dark:ring-1 dark:ring-ink-700">
-                    <div className="text-xs uppercase tracking-wider text-ink-700 font-semibold dark:text-turquoise-300">
-                      Reach us
-                    </div>
-                    <div className="mt-1 text-ink-900 font-semibold dark:text-sand-100">{CONTACT.phoneDisplay}</div>
+                <div className="mt-6 rounded-xl bg-sand-50 p-4 dark:bg-ink-900/60 dark:ring-1 dark:ring-ink-700">
+                  <div className="text-xs uppercase tracking-wider text-ink-700 font-semibold dark:text-turquoise-300">
+                    Hours
                   </div>
-                  <div className="rounded-xl bg-sand-50 p-4 dark:bg-ink-900/60 dark:ring-1 dark:ring-ink-700">
-                    <div className="text-xs uppercase tracking-wider text-ink-700 font-semibold dark:text-turquoise-300">
-                      Hours
-                    </div>
-                    <div className="mt-1 text-ink-900 font-semibold leading-tight dark:text-sand-100">
-                      {CONTACT.businessHours}
-                    </div>
+                  <div className="mt-1 text-ink-900 font-semibold leading-tight dark:text-sand-100">
+                    {CONTACT.businessHours}
                   </div>
                 </div>
               </div>
