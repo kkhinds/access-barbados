@@ -18,7 +18,7 @@ const services: Service[] = [
   {
     title: "Senior Care Home Visits",
     description:
-      "Visiting Mum at the care home? Bringing Dad home for Sunday lunch? Pickups to and from senior homes across the island, on schedule and on time.",
+      "Visiting Mum at the care home? Bringing Dad home for Sunday lunch? Pickups to and from senior homes across the island, on time.",
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
         <path d="M3 21V7l9-4 9 4v14H3Zm6-2h2v-3H9v3Zm4 0h2v-3h-2v3Z" />
@@ -58,7 +58,7 @@ const services: Service[] = [
   {
     title: "Wheelchair-Accessible Rides",
     description:
-      "Vehicles built around the wheelchair, not the other way round. Secure tie-downs, easy boarding, and plenty of room for the people riding with you.",
+      "Vehicles built around the wheelchair, not the other way round. Secure tie-downs, easy boarding, and plenty of room for whoever’s riding along.",
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
         <path d="M12 4.5a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2 5h3.2a1 1 0 0 1 .98.8l.62 3.2H17a1 1 0 1 1 0 2h-2.6l.45 2.32A4.5 4.5 0 1 1 9.6 21.8l-.06-.06-1.16-1.4A3.5 3.5 0 1 0 13 14.78V14h-3a1 1 0 0 1-.98-.8l-.62-3.2A1 1 0 0 1 10 9.5Z" />
@@ -68,7 +68,7 @@ const services: Service[] = [
   {
     title: "Family Outings & Day Trips",
     description:
-      "Lunch in Oistins. A drive up to Bathsheba. Sunday service. A grandchild’s birthday party. Whatever the occasion, we’ll make sure you’re there.",
+      "Lunch in Oistins. A drive up to Bathsheba. Sunday service. A grandchild’s birthday party. Whatever the occasion, we’ll get you there.",
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
         <path d="M12 2 4 6v6c0 5 3.4 9.3 8 10 4.6-.7 8-5 8-10V6l-8-4Zm-1 12-4-4 1.4-1.4L11 11.2l4.6-4.6L17 8l-6 6Z" />
@@ -95,7 +95,7 @@ export default function Services() {
           <span className="eyebrow">What we do</span>
           <h2 className="h-display mt-3 sm:mt-4">Wherever you need to be, we&apos;ve got the ride.</h2>
           <p className="mt-4 sm:mt-5 text-base sm:text-lg text-ink-700 leading-relaxed dark:text-sand-100">
-            We plan the route, the timing, and the support around your needs. One call sorts it.
+            One call. We&apos;ll plan the route, the timing, and the help you need.
           </p>
         </div>
 

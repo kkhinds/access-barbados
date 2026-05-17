@@ -31,7 +31,7 @@ export default function Hero() {
               dark:text-sand-100">
               Reliable, accessible transport for Barbadians who need a little extra care getting
               around. Appointments, errands, family time, wherever the day takes you. Schedule
-              in advance and ride at ease.
+              ahead and ride easy.
             </p>
 
             <div className="mt-7 sm:mt-8 grid grid-cols-1 sm:flex sm:flex-wrap gap-3">

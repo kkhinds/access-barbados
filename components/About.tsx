@@ -24,7 +24,7 @@ export default function About() {
         <div>
           <span className="eyebrow">Why we’re here</span>
           <h2 className="h-display mt-3 sm:mt-4">
-            Your independence is our <span className="text-coral-700 dark:text-coral-400">whole reason for existing.</span>
+            Your independence is <span className="text-coral-700 dark:text-coral-400">the whole point.</span>
           </h2>
           <p className="mt-5 sm:mt-6 text-base sm:text-lg text-ink-700 leading-relaxed dark:text-sand-100">
             We started Access Barbados because too many of our own people have had to skip
@@ -32,8 +32,8 @@ export default function About() {
             because the regular taxi wouldn&apos;t work.
           </p>
           <p className="mt-4 text-base sm:text-lg text-ink-700 leading-relaxed dark:text-sand-100">
-            So we built the service around the trips that actually matter, and around the people
-            taking them.
+            So we built the service around the trips that matter, and around the people taking
+            them.
           </p>
         </div>
 
