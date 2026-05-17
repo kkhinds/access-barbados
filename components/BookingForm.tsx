@@ -14,7 +14,7 @@ const serviceOptions = [
   "Senior care home visit / pickup",
   "Medication pickup & drop-off",
   "Physiotherapy",
-  "Supermarket / shopping",
+  "Shopping",
   "Family outing / day trip",
   "Airport transfer",
   "Cruise terminal pickup",
@@ -293,7 +293,6 @@ export default function BookingForm() {
                     "Wheelchair user",
                     "Walker / cane",
                     "Oxygen tank",
-                    "Service animal",
                     "Caregiver riding along",
                     "Extra boarding time",
                   ].map((m) => (

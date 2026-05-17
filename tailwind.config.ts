@@ -49,6 +49,12 @@ const config: Config = {
           400: "#9fb0bc", // on dark bg only
           300: "#c6d2da", // on dark bg only
         },
+        whatsapp: {
+          50: "#dcf8c6", // soft tint, icon-circle background
+          500: "#25d366", // primary brand green — icons + accents
+          700: "#128c7e", // darker brand green — button bg with white text, passes AA
+          900: "#075e54", // deep teal — icons on light tint, AAA
+        },
       },
       fontFamily: {
         sans: [

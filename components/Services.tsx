@@ -18,7 +18,7 @@ const services: Service[] = [
   {
     title: "Senior Care Home Visits",
     description:
-      "Visiting Mum at the care home? Bringing Dad home for Sunday lunch? We handle pickups to and from senior homes across the island, with patient drivers and accessible vehicles.",
+      "Visiting Mum at the care home? Bringing Dad home for Sunday lunch? Pickups to and from senior homes across the island, on schedule and on time.",
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
         <path d="M3 21V7l9-4 9 4v14H3Zm6-2h2v-3H9v3Zm4 0h2v-3h-2v3Z" />
@@ -46,9 +46,9 @@ const services: Service[] = [
     ),
   },
   {
-    title: "Supermarket & Errands",
+    title: "Shopping & Errands",
     description:
-      "Your weekly Massy run, a Saturday at Sheraton, the hardware store, the bank. Call ahead, ride at your pace, and we’ll help with the bags.",
+      "Massy, Sheraton, Sky Mall, the hardware store, the bank. Wherever you need to go, ride at your pace and we’ll help with the bags.",
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
         <path d="M7 4h11l1.5 9H8.4l-.4 2H19v2H7l1-5L6 6H4V4h3Zm2 16a2 2 0 1 1 0-4 2 2 0 0 1 0 4Zm9 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z" />
@@ -58,7 +58,7 @@ const services: Service[] = [
   {
     title: "Wheelchair-Accessible Rides",
     description:
-      "Vehicles built around the wheelchair, not the other way round. Secure tie-downs, easy boarding, plenty of room, and a driver who knows the routine.",
+      "Vehicles built around the wheelchair, not the other way round. Secure tie-downs, easy boarding, and plenty of room for the people riding with you.",
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
         <path d="M12 4.5a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2 5h3.2a1 1 0 0 1 .98.8l.62 3.2H17a1 1 0 1 1 0 2h-2.6l.45 2.32A4.5 4.5 0 1 1 9.6 21.8l-.06-.06-1.16-1.4A3.5 3.5 0 1 0 13 14.78V14h-3a1 1 0 0 1-.98-.8l-.62-3.2A1 1 0 0 1 10 9.5Z" />
@@ -95,8 +95,7 @@ export default function Services() {
           <span className="eyebrow">What we do</span>
           <h2 className="h-display mt-3 sm:mt-4">Wherever you need to be, we&apos;ve got the ride.</h2>
           <p className="mt-4 sm:mt-5 text-base sm:text-lg text-ink-700 leading-relaxed dark:text-sand-100">
-            From your weekly doctor&apos;s visit to a Saturday at the supermarket, we plan the route,
-            the timing, and the support. So you can show up rested and on time. One call sorts it.
+            We plan the route, the timing, and the support around your needs. One call sorts it.
           </p>
         </div>
 

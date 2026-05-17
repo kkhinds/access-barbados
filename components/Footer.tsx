@@ -19,8 +19,8 @@ export default function Footer() {
               <span className="text-white font-display text-lg font-extrabold">Access Barbados</span>
             </div>
             <p className="mt-4 max-w-md leading-relaxed text-sm sm:text-base">
-              Reliable, wheelchair-accessible rides for Barbadians who need a little extra care
-              getting around. From the doctor to the supermarket, we&apos;ve got you.
+              Reliable, wheelchair-accessible rides for Barbadians. Planned around your day,
+              not ours.
             </p>
           </div>
 

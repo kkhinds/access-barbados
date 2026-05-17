@@ -147,6 +147,12 @@
       dark:bg-coral-500 dark:hover:bg-coral-400;
   }
 
+  .btn-whatsapp {
+    /* whatsapp-700 (#128c7e) on white text: ~5.4:1 — passes AA. Recognizable as WhatsApp. */
+    @apply btn bg-whatsapp-700 text-white shadow-soft hover:bg-whatsapp-900 active:translate-y-px
+      dark:bg-whatsapp-500 dark:text-ink-900 dark:hover:bg-whatsapp-700 dark:hover:text-white;
+  }
+
   .section {
     @apply py-14 sm:py-20 lg:py-24;
   }

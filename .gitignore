@@ -18,3 +18,4 @@ next-env.d.ts
 
 # Claude Code project-local state
 .claude/
+.gstack/

@@ -29,8 +29,8 @@ export default function MobileActionBar() {
           href={`https://wa.me/${CONTACT.whatsApp}?text=${waMessage}`}
           target="_blank"
           rel="noopener"
-          className="flex flex-col items-center justify-center gap-1 rounded-xl py-2 text-coral-700 hover:bg-coral-50 active:bg-coral-100
-            dark:text-coral-300 dark:hover:bg-ink-800 dark:active:bg-ink-700"
+          className="flex flex-col items-center justify-center gap-1 rounded-xl py-2 text-whatsapp-900 hover:bg-whatsapp-50 active:bg-whatsapp-50
+            dark:text-whatsapp-500 dark:hover:bg-ink-800 dark:active:bg-ink-700"
         >
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden>
             <path d="M20.5 3.5A11 11 0 0 0 3.3 17.3L2 22l4.8-1.3A11 11 0 1 0 20.5 3.5Zm-8.5 17a8.9 8.9 0 0 1-4.6-1.3l-.3-.2-2.9.8.8-2.8-.2-.3a8.9 8.9 0 1 1 7.2 3.8Zm5-6.7c-.3-.1-1.6-.8-1.8-.9-.3-.1-.4-.1-.6.1l-.8 1c-.2.2-.3.2-.6.1a7.3 7.3 0 0 1-2.1-1.3 8.3 8.3 0 0 1-1.5-1.8c-.2-.3 0-.4.1-.6l.4-.4.3-.5c.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1 2.7 11.6 11.6 0 0 0 4.5 4 5.2 5.2 0 0 0 3 .6c.6-.1 1.6-.6 1.8-1.2.2-.6.2-1.1.2-1.2 0-.1-.2-.2-.4-.2Z" />

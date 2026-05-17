@@ -1,19 +1,19 @@
 const highlights = [
   {
-    title: "Vehicles built for the job",
-    body: "Air-conditioned vans with secure wheelchair tie-downs, easy boarding, and room for the people who ride with you.",
+    title: "Bajan-owned, Barbadian-run",
+    body: "A local team that knows the island, knows the people, and answers the phone every time it rings.",
   },
   {
-    title: "Drivers who get it",
-    body: "Trained to assist safely, patient when you need a minute, and discreet about what’s none of their business.",
+    title: "Standing weekly rides",
+    body: "Set up your regular physio, dialysis, or shopping run once. We remember the schedule, the address, and how you like things done.",
   },
   {
-    title: "Every corner of the island",
-    body: "From St. Lucy to Christ Church and everywhere between. If you can name it, we can drive to it.",
+    title: "We wait at appointments",
+    body: "Short waits at the doctor’s office come free. No need to rush, no need to call a second ride home.",
   },
   {
-    title: "Plan ahead, ride easy",
-    body: "Tell us where, when, and what you need. We’ll handle the rest, including standing weekly rides if you’d like.",
+    title: "Help in, help out, help with bags",
+    body: "Drivers stay until you’re settled. They lift, fetch, and load whatever needs lifting, fetching, or loading.",
   },
 ];
 
@@ -32,9 +32,8 @@ export default function About() {
             because the regular taxi wouldn&apos;t work.
           </p>
           <p className="mt-4 text-base sm:text-lg text-ink-700 leading-relaxed dark:text-sand-100">
-            So we built a service around the trips that actually matter. Vehicles you can use.
-            Drivers who&apos;ll wait, help, and treat you like family. Schedules planned around your
-            day, not ours. Call us once, and we&apos;ll know how to help the next time.
+            So we built the service around the trips that actually matter, and around the people
+            taking them.
           </p>
         </div>
 
