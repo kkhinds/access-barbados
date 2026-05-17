@@ -37,19 +37,32 @@ export default function About() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Card chrome dropped — divider list lets the points read as quiet
+            statements rather than four boxes asking for attention. */}
+        <ul className="divide-y divide-sand-200 dark:divide-ink-700">
           {highlights.map((h) => (
-            <div key={h.title} className="card">
-              <div className="flex items-start gap-2 text-turquoise-700 dark:text-turquoise-300">
-                <svg viewBox="0 0 24 24" className="h-5 w-5 mt-0.5 flex-none" fill="currentColor" aria-hidden>
-                  <path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2Z" />
-                </svg>
-                <h3 className="font-semibold text-ink-900 dark:text-sand-100">{h.title}</h3>
+            <li key={h.title} className="py-5 first:pt-0 last:pb-0">
+              <div className="flex items-start gap-3">
+                <span
+                  aria-hidden
+                  className="mt-1 inline-flex h-7 w-7 flex-none items-center justify-center rounded-full bg-turquoise-100 text-turquoise-800 dark:bg-turquoise-900/40 dark:text-turquoise-300"
+                >
+                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
+                    <path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2Z" />
+                  </svg>
+                </span>
+                <div className="min-w-0">
+                  <h3 className="font-semibold text-ink-900 dark:text-sand-100">
+                    {h.title}
+                  </h3>
+                  <p className="mt-1 text-sm sm:text-base text-ink-700 leading-relaxed dark:text-sand-100/85">
+                    {h.body}
+                  </p>
+                </div>
               </div>
-              <p className="mt-2 text-sm sm:text-base text-ink-700 leading-relaxed dark:text-sand-100/85">{h.body}</p>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
