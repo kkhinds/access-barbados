@@ -81,32 +81,26 @@ export default function Hero() {
             </ul>
           </div>
 
-          {/* Visual card — hidden on phones (sticky bottom bar covers these actions), shown md+ */}
+          {/* Hours panel — visible md+. Sticky bottom bar covers Call/Book on phones. */}
           <div className="hidden md:block lg:col-span-5">
             <div className="relative max-w-md mx-auto lg:max-w-none">
               <div className="card shadow-soft">
-                <div className="flex items-center gap-3 mb-5">
-                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-turquoise-100 text-turquoise-700 dark:bg-turquoise-900/40 dark:text-turquoise-300">
-                    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="currentColor" aria-hidden>
-                      <path d="M3 17v-1.5a4.5 4.5 0 0 1 4.5-4.5h9A4.5 4.5 0 0 1 21 15.5V17H3Zm2-8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1H5V9Zm-1 10h2v2H4v-2Zm14 0h2v2h-2v-2Z" />
+                <div className="flex items-start gap-4">
+                  <span
+                    aria-hidden
+                    className="inline-flex h-12 w-12 flex-none items-center justify-center rounded-full bg-turquoise-100 text-turquoise-700 dark:bg-turquoise-900/40 dark:text-turquoise-300"
+                  >
+                    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="currentColor">
+                      <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm.5 5h-1v6l5.2 3.2.5-.86L12.5 12.5V7Z" />
                     </svg>
                   </span>
                   <div>
-                    <div className="font-semibold text-ink-900 dark:text-sand-100">Need a lift?</div>
-                    <div className="text-sm text-ink-700 dark:text-sand-100/80">
-                      Tell us when and where. We&apos;ll call to confirm.
+                    <div className="text-xs uppercase tracking-wider text-turquoise-800 font-semibold dark:text-turquoise-300">
+                      We&apos;re open
                     </div>
-                  </div>
-                </div>
-                <a href="#book" className="btn-primary w-full">
-                  Schedule a Ride
-                </a>
-                <div className="mt-6 rounded-xl bg-sand-50 p-4 dark:bg-ink-900/60 dark:ring-1 dark:ring-ink-700">
-                  <div className="text-xs uppercase tracking-wider text-ink-700 font-semibold dark:text-turquoise-300">
-                    Hours
-                  </div>
-                  <div className="mt-1 text-ink-900 font-semibold leading-tight dark:text-sand-100">
-                    {CONTACT.businessHours}
+                    <div className="mt-1 text-lg font-semibold text-ink-900 leading-tight dark:text-sand-100">
+                      {CONTACT.businessHours}
+                    </div>
                   </div>
                 </div>
               </div>
