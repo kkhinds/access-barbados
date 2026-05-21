@@ -1,0 +1,11 @@
+[
+  { "slug": "medical-appointment", "label": "Medical appointment" },
+  { "slug": "senior-care-home", "label": "Senior care home visit / pickup" },
+  { "slug": "medication-pickup", "label": "Medication pickup & drop-off" },
+  { "slug": "physiotherapy", "label": "Physiotherapy" },
+  { "slug": "supermarket-errands", "label": "Shopping" },
+  { "slug": "family-outing", "label": "Family outing / day trip" },
+  { "slug": "airport-transfer", "label": "Airport transfer" },
+  { "slug": "cruise-terminal", "label": "Cruise terminal pickup" },
+  { "slug": "other", "label": "Other" }
+]

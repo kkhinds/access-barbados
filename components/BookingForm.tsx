@@ -4,22 +4,17 @@ import { useState } from "react";
 import { CONTACT } from "@/lib/contact";
 import TurnstileWidget from "./TurnstileWidget";
 import LocationAutocomplete, { type LocationValue } from "./LocationAutocomplete";
+import servicesData from "@/lib/services.json";
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-const serviceOptions = [
-  "Medical appointment",
-  "Senior care home visit / pickup",
-  "Medication pickup & drop-off",
-  "Physiotherapy",
-  "Shopping",
-  "Family outing / day trip",
-  "Airport transfer",
-  "Cruise terminal pickup",
-  "Other",
-];
+// Labels come from lib/services.json, which the CI sync script overwrites from
+// the admin's /api/public/sync endpoint before each build.
+const serviceOptions = (servicesData as Array<{ slug: string; label: string }>).map(
+  (s) => s.label,
+);
 
 export default function BookingForm() {
   const [status, setStatus] = useState<Status>("idle");
