@@ -23,6 +23,12 @@ const libDir = join(root, "lib");
 const url = process.env.ADMIN_SYNC_URL;
 
 if (!url) {
+  // Strict mode treats a missing URL the same as a failed fetch: both end with
+  // the build shipping whatever placeholder JSON is in the repo.
+  if (process.env.ADMIN_SYNC_STRICT === "true") {
+    console.error("[sync] ADMIN_SYNC_URL not set and ADMIN_SYNC_STRICT=true.");
+    process.exit(1);
+  }
   console.warn(
     "[sync] ADMIN_SYNC_URL not set; skipping. Existing lib/*.json (if any) will be used.",
   );
@@ -66,9 +72,13 @@ try {
   console.error("[sync] Failed:", err instanceof Error ? err.message : err);
   // Fail the build only if we explicitly opted in to strict mode. Otherwise
   // continue with whatever JSON files already exist in the repo.
+  //
+  // Set exitCode rather than calling process.exit() here: exiting while fetch
+  // still holds open handles trips a libuv assertion on Windows and reports
+  // 127 instead of 1.
   if (process.env.ADMIN_SYNC_STRICT === "true") {
-    process.exit(1);
+    process.exitCode = 1;
+  } else {
+    console.warn("[sync] Continuing with existing JSON files.");
   }
-  console.warn("[sync] Continuing with existing JSON files.");
-  process.exit(0);
 }

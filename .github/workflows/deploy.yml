@@ -33,6 +33,10 @@ jobs:
           # e.g. https://access-barbados-admin.vercel.app/api/public/sync
           # If unset, the script logs a warning and uses the JSON already in the repo.
           ADMIN_SYNC_URL: ${{ vars.ADMIN_SYNC_URL }}
+          # Fail the build when the sync fails. Without this the build falls back
+          # to whatever lib/*.json holds, which shipped REPLACE_ME placeholders
+          # to the live site the last time the backend went down.
+          ADMIN_SYNC_STRICT: "true"
         run: node scripts/sync-from-admin.mjs
 
       - name: Build (static export for custom domain accessbim.com)
