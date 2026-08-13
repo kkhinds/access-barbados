@@ -22,7 +22,7 @@ export default function Header() {
         className="bg-coral-600 text-white text-center text-xs sm:text-sm font-semibold px-4 py-2
           dark:bg-coral-700"
       >
-        Coming soon — we&apos;re still getting set up. Bookings open shortly.
+        Coming soon. We&apos;re still getting set up. Bookings open shortly.
       </div>
 
       <div className="container-page flex items-center justify-between h-16 sm:h-20">
