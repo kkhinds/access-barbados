@@ -1,22 +1,28 @@
+import Image from "next/image";
 import { CONTACT, waMessage } from "@/lib/contact";
 
 export default function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="on-dark bg-ink-900 text-ink-300">
+    <footer className="on-dark bg-navy-900 text-navy-300">
       <div className="container-page py-12 sm:py-14">
         <div className="grid gap-8 sm:gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2">
-              <span
-                aria-hidden
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-turquoise-500 text-white"
-              >
-                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden>
-                  <path d="M12 4.5a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2 5h3.2a1 1 0 0 1 .98.8l.62 3.2H17a1 1 0 1 1 0 2h-2.6l.45 2.32A4.5 4.5 0 1 1 9.6 21.8l-.06-.06-1.16-1.4A3.5 3.5 0 1 0 13 14.78V14h-3a1 1 0 0 1-.98-.8l-.62-3.2A1 1 0 0 1 10 9.5Z" />
-                </svg>
+              <span className="inline-flex h-12 w-12 flex-none items-center justify-center overflow-hidden rounded-full">
+                <Image
+                  src="/logo.png"
+                  alt=""
+                  aria-hidden="true"
+                  width={297}
+                  height={211}
+                  className="h-full w-auto max-w-none"
+                />
               </span>
-              <span className="text-white font-display text-lg font-extrabold">Access Barbados</span>
+              <span className="font-display text-lg font-extrabold uppercase tracking-tight">
+                <span className="text-white">Access</span>{" "}
+                <span className="text-sky-500">Barbados</span>
+              </span>
             </div>
             <p className="mt-4 max-w-md leading-relaxed text-sm sm:text-base">
               Reliable, wheelchair-accessible rides for Barbadians. Planned around your day,
@@ -57,19 +63,19 @@ export default function Footer() {
                   {CONTACT.email}
                 </a>
               </li>
-              <li className="px-2 py-1 text-ink-300 text-sm">{CONTACT.addressLine}</li>
-              <li className="px-2 py-1 text-ink-300 text-sm">{CONTACT.businessHours}</li>
+              <li className="px-2 py-1 text-navy-300 text-sm">{CONTACT.addressLine}</li>
+              <li className="px-2 py-1 text-navy-300 text-sm">{CONTACT.businessHours}</li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-10 sm:mt-12 pt-6 border-t border-ink-700">
-          <div className="rounded-xl bg-ink-800 border border-ink-700 p-4 sm:p-5 text-sm">
+        <div className="mt-10 sm:mt-12 pt-6 border-t border-navy-700">
+          <div className="rounded-xl bg-navy-800 border border-navy-700 p-4 sm:p-5 text-sm">
             <h4 className="text-white font-semibold">Trouble using this site?</h4>
-            <p className="mt-2 text-ink-300 leading-relaxed">
+            <p className="mt-2 max-w-prose text-navy-300 leading-relaxed">
               We built this site to work with screen readers, keyboards, high-contrast text, and
               reduced motion. If anything&apos;s still hard to use, just call us at{" "}
-              <a href={`tel:${CONTACT.phoneTel}`} className="font-semibold text-white underline underline-offset-2 hover:text-sand-100">
+              <a href={`tel:${CONTACT.phoneTel}`} className="font-semibold text-white underline underline-offset-2 hover:text-mist-100">
                 {CONTACT.phoneDisplay}
               </a>
               . We&apos;ll take your booking over the phone and skip the website entirely.
@@ -78,7 +84,12 @@ export default function Footer() {
 
           <div className="mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-3 text-xs sm:text-sm">
             <div>&copy; {year} Access Barbados. All rights reserved.</div>
-            <div className="text-ink-400">Accessible rides, anywhere on the island.</div>
+            <div className="text-navy-300">
+              <span className="font-semibold uppercase tracking-wide text-sky-500">
+                Reliable. Accessible. Caring.
+              </span>{" "}
+              Riding together, every step of the way.
+            </div>
           </div>
         </div>
       </div>

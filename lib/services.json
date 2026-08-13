@@ -4,6 +4,7 @@
   { "slug": "medication-pickup", "label": "Medication pickup & drop-off" },
   { "slug": "physiotherapy", "label": "Physiotherapy" },
   { "slug": "supermarket-errands", "label": "Shopping" },
+  { "slug": "bill-payments", "label": "Bill payments" },
   { "slug": "family-outing", "label": "Family outing / day trip" },
   { "slug": "airport-transfer", "label": "Airport transfer" },
   { "slug": "cruise-terminal", "label": "Cruise terminal pickup" },

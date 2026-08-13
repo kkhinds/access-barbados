@@ -56,6 +56,16 @@ const services: Service[] = [
     ),
   },
   {
+    title: "Bill Payments",
+    description:
+      "Light bill, water, cable, NIS contributions. The kind of lines that eat up an afternoon. Hand us the slips and the payment, we’ll stand in the queue for you.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+        <path d="M6 2h12v20l-3-2-3 2-3-2-3 2V2Zm2 5v2h8V7H8Zm0 4v2h8v-2H8Zm0 4v2h5v-2H8Z" />
+      </svg>
+    ),
+  },
+  {
     title: "Wheelchair-Accessible Rides",
     description:
       "Vehicles built around the wheelchair, not the other way round. Secure tie-downs, easy boarding, and plenty of room for whoever’s riding along.",
@@ -89,25 +99,27 @@ const services: Service[] = [
 
 export default function Services() {
   return (
-    <section id="services" className="section bg-sand-50 dark:bg-ink-900">
+    <section id="services" className="section bg-page dark:bg-navy-900">
       <div className="container-page">
         <div className="max-w-2xl">
           <span className="eyebrow">What we do</span>
           <h2 className="h-display mt-3 sm:mt-4">Wherever you need to be, we&apos;ve got the ride.</h2>
-          <p className="mt-4 sm:mt-5 text-base sm:text-lg text-ink-700 leading-relaxed dark:text-sand-100">
+          <p className="mt-4 sm:mt-5 text-base sm:text-lg text-navy-700 leading-relaxed dark:text-mist-100">
             One call. We&apos;ll plan the route, the timing, and the help you need.
           </p>
         </div>
 
-        <div className="mt-10 sm:mt-12 grid gap-4 sm:gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {/* Three columns, not four: nine services divide evenly and the copy gets
+            a readable measure instead of ~24 characters a line. */}
+        <div className="mt-10 sm:mt-12 grid gap-4 sm:gap-5 sm:grid-cols-2 md:grid-cols-3">
           {services.map((s) => (
             <article key={s.title} className="card hover:-translate-y-1 hover:shadow-soft transition">
-              <div className="inline-flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-turquoise-100 text-turquoise-700
-                dark:bg-turquoise-900/40 dark:text-turquoise-300">
+              <div className="inline-flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-brand-100 text-brand-700
+                dark:bg-brand-900/40 dark:text-brand-300">
                 <span className="block h-5 w-5 sm:h-6 sm:w-6">{s.icon}</span>
               </div>
-              <h3 className="mt-3 sm:mt-4 text-base sm:text-lg font-semibold text-ink-900 dark:text-sand-100">{s.title}</h3>
-              <p className="mt-1.5 sm:mt-2 text-sm sm:text-base text-ink-700 leading-relaxed dark:text-sand-100/85">{s.description}</p>
+              <h3 className="mt-3 sm:mt-4 text-base sm:text-lg font-semibold text-navy-900 dark:text-mist-100">{s.title}</h3>
+              <p className="mt-1.5 sm:mt-2 text-sm sm:text-base text-navy-700 leading-relaxed dark:text-mist-100/85">{s.description}</p>
             </article>
           ))}
         </div>

@@ -128,13 +128,13 @@ export default function BookingForm() {
   }
 
   return (
-    <section id="book" className="section bg-gradient-to-b from-turquoise-50/60 to-sand-50
-      dark:from-ink-800 dark:to-ink-900">
+    <section id="book" className="section bg-gradient-to-b from-brand-50/60 to-page
+      dark:from-navy-800 dark:to-navy-900">
       <div className="container-page">
         <div className="max-w-3xl mx-auto text-center">
           <span className="eyebrow">Schedule a ride</span>
           <h2 className="h-display mt-3 sm:mt-4">Tell us where you need to go.</h2>
-          <p className="mt-4 sm:mt-5 text-base sm:text-lg text-ink-700 leading-relaxed dark:text-sand-100">
+          <p className="mt-4 sm:mt-5 max-w-xl mx-auto text-base sm:text-lg text-navy-700 leading-relaxed dark:text-mist-100">
             Name and phone is all we need to get started. Share as much else as you like.
             We&apos;ll call back to confirm pickup time, address, and anything special you need.
           </p>
@@ -143,14 +143,14 @@ export default function BookingForm() {
         <div className="mt-10 sm:mt-12 max-w-3xl mx-auto card shadow-soft">
           {status === "success" ? (
             <div className="text-center py-6 sm:py-8" role="status" aria-live="polite">
-              <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-turquoise-100 text-turquoise-800
-                dark:bg-turquoise-900/40 dark:text-turquoise-300">
+              <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-brand-100 text-brand-800
+                dark:bg-brand-900/40 dark:text-brand-300">
                 <svg viewBox="0 0 24 24" className="h-7 w-7" fill="currentColor" aria-hidden>
                   <path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2Z" />
                 </svg>
               </div>
-              <h3 className="mt-4 text-xl sm:text-2xl font-bold text-ink-900 dark:text-sand-100">We&apos;ve got it.</h3>
-              <p className="mt-3 text-base text-ink-700 max-w-md mx-auto dark:text-sand-100/85">
+              <h3 className="mt-4 text-xl sm:text-2xl font-bold text-navy-900 dark:text-mist-100">We&apos;ve got it.</h3>
+              <p className="mt-3 text-base text-navy-700 max-w-md mx-auto dark:text-mist-100/85">
                 Thanks. We&apos;ll call you back to confirm the pickup. If you need the ride today,
                 give us a ring directly so we can sort it on the spot.
               </p>
@@ -171,7 +171,7 @@ export default function BookingForm() {
             <form onSubmit={onSubmit} className="grid gap-5 sm:grid-cols-2" noValidate>
               <div className="sm:col-span-1">
                 <label htmlFor="name" className="field-label">
-                  Full name <span className="text-coral-700" aria-hidden>*</span>
+                  Full name <span className="text-alert-700 dark:text-alert-300" aria-hidden>*</span>
                   <span className="sr-only">(required)</span>
                 </label>
                 <input id="name" name="name" required className="field-input" autoComplete="name" />
@@ -179,7 +179,7 @@ export default function BookingForm() {
 
               <div className="sm:col-span-1">
                 <label htmlFor="phone" className="field-label">
-                  Phone <span className="text-coral-700" aria-hidden>*</span>
+                  Phone <span className="text-alert-700 dark:text-alert-300" aria-hidden>*</span>
                   <span className="sr-only">(required)</span>
                 </label>
                 <input
@@ -196,7 +196,7 @@ export default function BookingForm() {
 
               <div className="sm:col-span-2">
                 <label htmlFor="email" className="field-label">
-                  Email <span className="text-ink-700 font-normal">(optional)</span>
+                  Email <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
                 </label>
                 <input
                   id="email"
@@ -210,14 +210,14 @@ export default function BookingForm() {
 
               <div className="sm:col-span-1">
                 <label htmlFor="pickupDate" className="field-label">
-                  Pickup date <span className="text-ink-700 font-normal">(optional)</span>
+                  Pickup date <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
                 </label>
                 <input id="pickupDate" name="pickupDate" type="date" className="field-input" />
               </div>
 
               <div className="sm:col-span-1">
                 <label htmlFor="pickupTime" className="field-label">
-                  Pickup time <span className="text-ink-700 font-normal">(optional)</span>
+                  Pickup time <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
                 </label>
                 <input id="pickupTime" name="pickupTime" type="time" className="field-input" />
               </div>
@@ -228,7 +228,7 @@ export default function BookingForm() {
                   name="pickupLocation"
                   label={
                     <>
-                      Pickup location <span className="text-ink-700 font-normal">(optional)</span>
+                      Pickup location <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
                     </>
                   }
                   placeholder="Home address, hospital, hotel, landmark…"
@@ -242,7 +242,7 @@ export default function BookingForm() {
                   name="dropoffLocation"
                   label={
                     <>
-                      Drop-off location <span className="text-ink-700 font-normal">(optional)</span>
+                      Drop-off location <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
                     </>
                   }
                   placeholder="Destination"
@@ -252,7 +252,7 @@ export default function BookingForm() {
 
               <div className="sm:col-span-1">
                 <label htmlFor="serviceType" className="field-label">
-                  Service type <span className="text-ink-700 font-normal">(optional)</span>
+                  Service type <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
                 </label>
                 <select id="serviceType" name="serviceType" className="field-input">
                   <option value="">Choose a service…</option>
@@ -266,7 +266,7 @@ export default function BookingForm() {
 
               <div className="sm:col-span-1">
                 <label htmlFor="passengers" className="field-label">
-                  Number of passengers <span className="text-ink-700 font-normal">(optional)</span>
+                  Number of passengers <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
                 </label>
                 <input
                   id="passengers"
@@ -281,7 +281,7 @@ export default function BookingForm() {
 
               <fieldset className="sm:col-span-2">
                 <legend className="field-label">
-                  Mobility needs <span className="text-ink-700 font-normal">(optional, select any)</span>
+                  Mobility needs <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional, select any)</span>
                 </legend>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                   {[
@@ -294,11 +294,11 @@ export default function BookingForm() {
                   ].map((m) => (
                     <label
                       key={m}
-                      className="flex items-center gap-3 rounded-xl border-2 border-ink-600/30 bg-white px-3 py-3 min-h-[48px] hover:border-turquoise-700 has-[:checked]:border-turquoise-700 has-[:checked]:bg-turquoise-50 cursor-pointer transition
-                        dark:bg-ink-900 dark:border-ink-700 dark:hover:border-turquoise-400 dark:has-[:checked]:border-turquoise-400 dark:has-[:checked]:bg-turquoise-900/30"
+                      className="flex items-center gap-3 rounded-xl border-2 border-navy-600/30 bg-white px-3 py-3 min-h-[48px] hover:border-brand-700 has-[:checked]:border-brand-700 has-[:checked]:bg-brand-50 cursor-pointer transition
+                        dark:bg-navy-900 dark:border-navy-700 dark:hover:border-brand-400 dark:has-[:checked]:border-brand-400 dark:has-[:checked]:bg-brand-900/30"
                     >
-                      <input type="checkbox" name="mobility" value={m} className="h-5 w-5 accent-turquoise-600 flex-none dark:accent-turquoise-400" />
-                      <span className="text-sm sm:text-base text-ink-800 dark:text-sand-100">{m}</span>
+                      <input type="checkbox" name="mobility" value={m} className="h-5 w-5 accent-brand-600 flex-none dark:accent-brand-400" />
+                      <span className="text-sm sm:text-base text-navy-800 dark:text-mist-100">{m}</span>
                     </label>
                   ))}
                 </div>
@@ -306,7 +306,7 @@ export default function BookingForm() {
 
               <div className="sm:col-span-2">
                 <label htmlFor="notes" className="field-label">
-                  Anything else? <span className="text-ink-700 font-normal">(optional)</span>
+                  Anything else? <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
                 </label>
                 <textarea
                   id="notes"
@@ -340,8 +340,8 @@ export default function BookingForm() {
                 <div
                   role="alert"
                   aria-live="assertive"
-                  className="sm:col-span-2 rounded-xl border-2 border-coral-600 bg-coral-50 px-4 py-3 text-coral-800 font-medium
-                    dark:bg-coral-900/30 dark:border-coral-400 dark:text-coral-200"
+                  className="sm:col-span-2 rounded-xl border-2 border-alert-600 bg-alert-50 px-4 py-3 text-alert-800 font-medium
+                    dark:bg-alert-800/30 dark:border-alert-400 dark:text-alert-200"
                 >
                   <span className="sr-only">Error: </span>
                   {errorMsg || "Something went wrong. Please try again or call us."}
@@ -349,12 +349,12 @@ export default function BookingForm() {
               )}
 
               <div className="sm:col-span-2 flex flex-col-reverse sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-4 pt-2">
-                <p className="text-sm text-ink-700 text-center sm:text-left dark:text-sand-100/85">
+                <p className="text-sm text-navy-700 text-center sm:text-left dark:text-mist-100/85">
                   Prefer to talk? Call{" "}
                   <a
                     href={`tel:${CONTACT.phoneTel}`}
-                    className="font-semibold text-turquoise-800 underline underline-offset-2 decoration-2 hover:decoration-coral-700
-                      dark:text-turquoise-300 dark:hover:decoration-coral-400"
+                    className="font-semibold text-brand-800 underline underline-offset-2 decoration-2 hover:decoration-gold-500
+                      dark:text-brand-300 dark:hover:decoration-gold-400"
                   >
                     {CONTACT.phoneDisplay}
                   </a>

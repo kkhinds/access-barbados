@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { CONTACT } from "@/lib/contact";
 
 const navLinks = [
@@ -12,34 +13,58 @@ const navLinks = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
+
+  // The header is sticky, so every "#section" jump has to clear it. Measure the
+  // real height instead of hard-coding one: the pre-launch banner, a wrapped
+  // logo, and large browser text all change it.
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => {
+      // The open mobile drawer lives inside the header but scrolls away with it.
+      const drawer = el.querySelector<HTMLElement>("#mobile-nav");
+      const h = el.offsetHeight - (drawer?.offsetHeight ?? 0);
+      document.documentElement.style.setProperty("--header-h", `${h}px`);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   return (
-    <header className="sticky top-0 z-40 bg-sand-50/90 backdrop-blur border-b border-sand-100
-      dark:bg-ink-900/90 dark:border-ink-800">
+    <header
+      ref={headerRef}
+      className="sticky top-0 z-40 bg-page/90 backdrop-blur border-b border-mist-200
+      dark:bg-navy-900/90 dark:border-navy-800"
+    >
       {/* Pre-launch notice. Delete this block when the service goes live. */}
       <div
         role="status"
-        className="bg-coral-600 text-white text-center text-xs sm:text-sm font-semibold px-4 py-2
-          dark:bg-coral-700"
+        className="bg-gold-400 text-navy-900 text-center text-xs sm:text-sm font-semibold px-4 py-2"
       >
         Coming soon. We&apos;re still getting set up. Bookings open shortly.
       </div>
 
       <div className="container-page flex items-center justify-between h-16 sm:h-20">
         <a href="#top" className="flex items-center gap-2 group min-w-0" aria-label="Access Barbados home">
-          <span
-            aria-hidden="true"
-            className="inline-flex h-9 w-9 flex-none items-center justify-center rounded-full bg-turquoise-600 text-white shadow-soft group-hover:bg-turquoise-700 transition
-              dark:bg-turquoise-500 dark:text-ink-900 dark:group-hover:bg-turquoise-400"
-          >
-            {/* Wheelchair / accessibility icon */}
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden>
-              <path d="M12 4.5a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-2 5h3.2a1 1 0 0 1 .98.8l.62 3.2H17a1 1 0 1 1 0 2h-2.6l.45 2.32A4.5 4.5 0 1 1 9.6 21.8l-.06-.06-1.16-1.4A3.5 3.5 0 1 0 13 14.78V14h-3a1 1 0 0 1-.98-.8l-.62-3.2A1 1 0 0 1 10 9.5Z" />
-            </svg>
+          {/* The badge art sits in a white rectangle with padding either side, so
+              it gets centred and clipped to its own circle. */}
+          <span className="inline-flex h-10 w-10 flex-none items-center justify-center overflow-hidden rounded-full ring-1 ring-navy-900/10 dark:ring-white/15">
+            <Image
+              src="/logo.png"
+              alt=""
+              aria-hidden="true"
+              width={297}
+              height={211}
+              priority
+              className="h-full w-auto max-w-none"
+            />
           </span>
-          <span className="font-display text-base sm:text-xl font-extrabold text-ink-900 truncate
-            dark:text-sand-100">
-            Access Barbados
+          {/* Two-tone wordmark from the brand lockup. Uppercase is applied in CSS so
+              screen readers still say "Access Barbados", not the letters. */}
+          <span className="font-display text-base sm:text-xl font-extrabold uppercase tracking-tight truncate">
+            <span className="text-navy-900 dark:text-mist-100">Access</span>{" "}
+            <span className="text-brand-700 dark:text-sky-500">Barbados</span>
           </span>
         </a>
 
@@ -49,8 +74,8 @@ export default function Header() {
             <a
               key={l.href}
               href={l.href}
-              className="text-ink-800 font-medium hover:text-turquoise-700 transition
-                dark:text-sand-100 dark:hover:text-turquoise-300"
+              className="text-navy-800 font-medium hover:text-brand-700 transition
+                dark:text-mist-100 dark:hover:text-brand-300"
             >
               {l.label}
             </a>
@@ -62,8 +87,8 @@ export default function Header() {
 
         {/* Mobile toggle */}
         <button
-          className="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-lg text-ink-800 hover:bg-sand-100
-            dark:text-sand-100 dark:hover:bg-ink-800"
+          className="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-lg text-navy-800 hover:bg-mist-100
+            dark:text-mist-100 dark:hover:bg-navy-800"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="mobile-nav"
@@ -84,16 +109,16 @@ export default function Header() {
         <nav
           id="mobile-nav"
           aria-label="Mobile"
-          className="md:hidden border-t border-sand-100 bg-sand-50 shadow-card
-            dark:border-ink-800 dark:bg-ink-900"
+          className="md:hidden border-t border-mist-100 bg-page shadow-card
+            dark:border-navy-800 dark:bg-navy-900"
         >
           <div className="container-page py-3 flex flex-col gap-1">
             {navLinks.map((l) => (
               <a
                 key={l.href}
                 href={l.href}
-                className="px-3 py-3 min-h-[48px] flex items-center rounded-lg text-base text-ink-800 font-medium hover:bg-sand-100
-                  dark:text-sand-100 dark:hover:bg-ink-800"
+                className="px-3 py-3 min-h-[48px] flex items-center rounded-lg text-base text-navy-800 font-medium hover:bg-mist-100
+                  dark:text-mist-100 dark:hover:bg-navy-800"
                 onClick={() => setOpen(false)}
               >
                 {l.label}

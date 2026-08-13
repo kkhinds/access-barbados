@@ -5,7 +5,9 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 5rem;
+    /* Header.tsx measures the real sticky header and writes --header-h.
+       The fallback covers first paint and the no-JS case. */
+    scroll-padding-top: calc(var(--header-h, 8rem) + 1rem);
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     /* 17px base — better for low-vision and older users; respects browser zoom */
@@ -19,9 +21,8 @@
   }
 
   body {
-    @apply bg-sand-50 text-ink-900 antialiased dark:bg-ink-900 dark:text-sand-100;
-    font-feature-settings: "ss01", "cv11";
-    line-height: 1.6;
+    @apply bg-page text-navy-900 antialiased dark:bg-navy-900 dark:text-mist-100;
+    line-height: 1.65;
     padding-bottom: env(safe-area-inset-bottom);
   }
 
@@ -53,26 +54,26 @@
 
   /* High-contrast 3px focus ring with offset, visible on every background */
   :focus-visible {
-    outline: 3px solid #0e7a76;
+    outline: 3px solid #1166cc;
     outline-offset: 3px;
     border-radius: 4px;
   }
 
-  /* On dark backgrounds, use a lighter ring */
+  /* On navy, the brand gold is the only ring that stays loud */
   .on-dark :focus-visible,
   footer :focus-visible {
-    outline-color: #f0dfb1;
+    outline-color: #ffc20e;
   }
 
-  /* OS dark mode: light focus ring everywhere */
+  /* OS dark mode: gold ring everywhere */
   @media (prefers-color-scheme: dark) {
     :focus-visible {
-      outline-color: #f0dfb1;
+      outline-color: #ffc20e;
     }
   }
 
   ::selection {
-    @apply bg-turquoise-200 text-ink-900;
+    @apply bg-brand-100 text-navy-900;
   }
 
   /* Prevent iOS Safari from auto-zooming on input focus (needs >=16px) */
@@ -88,7 +89,7 @@
     left: 0.5rem;
     top: -3rem;
     z-index: 100;
-    background: #0c615f;
+    background: #0d51a4;
     color: white;
     padding: 0.75rem 1.25rem;
     border-radius: 0.5rem;
@@ -100,8 +101,8 @@
   }
   @media (prefers-color-scheme: dark) {
     .skip-link {
-      background: #f0dfb1;
-      color: #0a1820;
+      background: #ffc20e;
+      color: #0b1d3a;
     }
   }
 
@@ -110,7 +111,7 @@
     .btn,
     .btn-primary,
     .btn-secondary,
-    .btn-coral {
+    .btn-whatsapp {
       border: 1px solid CanvasText;
     }
     :focus-visible {
@@ -124,33 +125,29 @@
     @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
   }
 
+  /* Focus comes from the global 3px :focus-visible outline. A Tailwind ring
+     here would paint its default blue on top of it. */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 sm:px-6 py-3 text-base font-semibold transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2;
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 sm:px-6 py-3 text-base font-semibold transition-all duration-200;
     min-height: 48px;
   }
 
   .btn-primary {
-    /* turquoise-700 on white text: ~7.2:1 passes AAA. Dark: turquoise-500 on ink-900 ~6.4:1 */
-    @apply btn bg-turquoise-700 text-white shadow-soft hover:bg-turquoise-800 active:translate-y-px
-      dark:bg-turquoise-500 dark:text-ink-900 dark:hover:bg-turquoise-400;
+    /* brand-700 (#1166CC) with white: 5.5:1. Dark: brand light blue on navy, 7.1:1 */
+    @apply btn bg-brand-700 text-white shadow-soft hover:bg-brand-800 active:translate-y-px
+      dark:bg-sky-500 dark:text-navy-900 dark:hover:bg-sky-300;
   }
 
   .btn-secondary {
-    /* turquoise-800 text on white: ~10:1 AAA. Dark: sand-100 text on ink-800 ~13:1 */
-    @apply btn bg-white text-turquoise-800 border-2 border-turquoise-700 hover:bg-turquoise-50
-      dark:bg-ink-800 dark:text-sand-100 dark:border-turquoise-400 dark:hover:bg-ink-700;
-  }
-
-  .btn-coral {
-    /* coral-600 on white text: ~4.9:1 AA. Dark: coral-400 stays vivid on ink-900 */
-    @apply btn bg-coral-600 text-white shadow-soft hover:bg-coral-700 active:translate-y-px
-      dark:bg-coral-500 dark:hover:bg-coral-400;
+    /* brand-800 text on white: 7.7:1. Dark: mist-100 text on navy-800 ~13:1 */
+    @apply btn bg-white text-brand-800 border-2 border-brand-700 hover:bg-brand-50
+      dark:bg-navy-800 dark:text-mist-100 dark:border-sky-500 dark:hover:bg-navy-700;
   }
 
   .btn-whatsapp {
-    /* whatsapp-700 (#128c7e) on white text: ~5.4:1 — passes AA. Recognizable as WhatsApp. */
+    /* whatsapp-700 on white text: 5.2:1, passes AA at this 18px/600 size. */
     @apply btn bg-whatsapp-700 text-white shadow-soft hover:bg-whatsapp-900 active:translate-y-px
-      dark:bg-whatsapp-500 dark:text-ink-900 dark:hover:bg-whatsapp-700 dark:hover:text-white;
+      dark:bg-whatsapp-500 dark:text-navy-900 dark:hover:bg-whatsapp-700 dark:hover:text-white;
   }
 
   .section {
@@ -158,35 +155,37 @@
   }
 
   .eyebrow {
-    /* turquoise-800 on light, turquoise-300 on dark — both pass AA */
-    @apply inline-block text-xs sm:text-sm font-semibold uppercase tracking-[0.18em] text-turquoise-800
-      dark:text-turquoise-300;
+    /* brand-800 on light 7.2:1, sky-500 on navy 7.1:1 */
+    @apply inline-block text-xs sm:text-sm font-semibold uppercase tracking-[0.14em] text-brand-800
+      dark:text-sky-500;
   }
 
   .h-display {
-    @apply font-display text-[1.75rem] leading-[1.15] sm:text-4xl lg:text-5xl font-bold tracking-tight text-ink-900
-      dark:text-sand-100;
+    @apply font-display text-[1.75rem] leading-[1.15] sm:text-4xl lg:text-5xl font-bold tracking-tight text-balance text-navy-900
+      dark:text-mist-100;
   }
 
+  /* White card on the tinted ground. The border is mist-200 rather than mist-100
+     so the card edge stays findable against the blue page. */
   .card {
-    @apply bg-white rounded-xl2 shadow-card p-5 sm:p-7 lg:p-8 border border-sand-100
-      dark:bg-ink-800 dark:border-ink-700 dark:shadow-none;
+    @apply bg-white rounded-xl2 shadow-card p-5 sm:p-7 lg:p-8 border border-mist-200
+      dark:bg-navy-800 dark:border-navy-700 dark:shadow-none;
   }
 
   .field-label {
-    @apply block text-base font-semibold text-ink-900 mb-2
-      dark:text-sand-100;
+    @apply block text-base font-semibold text-navy-900 mb-2
+      dark:text-mist-100;
   }
 
   .field-input {
-    /* 2px border for visibility. Dark: ink-800 surface with sand text */
-    @apply block w-full rounded-xl border-2 border-ink-600/40 bg-white px-4 py-3 text-base text-ink-900 placeholder:text-ink-600 shadow-sm transition focus:border-turquoise-700 focus:outline-none focus:ring-2 focus:ring-turquoise-700/40
-      dark:bg-ink-900 dark:border-ink-700 dark:text-sand-100 dark:placeholder:text-ink-400 dark:focus:border-turquoise-400 dark:focus:ring-turquoise-400/30;
+    /* 2px border for visibility. Dark: navy-900 surface with mist text */
+    @apply block w-full rounded-xl border-2 border-navy-600/40 bg-white px-4 py-3 text-base text-navy-900 placeholder:text-navy-600 shadow-sm transition focus:border-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-700/40
+      dark:bg-navy-900 dark:border-navy-700 dark:text-mist-100 dark:placeholder:text-navy-400 dark:focus:border-sky-500 dark:focus:ring-sky-500/30;
     min-height: 48px;
   }
 
   .field-input:disabled {
-    @apply bg-sand-50 text-ink-600 cursor-not-allowed
-      dark:bg-ink-800 dark:text-ink-400;
+    @apply bg-page text-navy-600 cursor-not-allowed
+      dark:bg-navy-800 dark:text-navy-400;
   }
 }

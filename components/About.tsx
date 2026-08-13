@@ -24,14 +24,14 @@ export default function About() {
         <div>
           <span className="eyebrow">Why we’re here</span>
           <h2 className="h-display mt-3 sm:mt-4">
-            Your independence is <span className="text-coral-700 dark:text-coral-400">the whole point.</span>
+            Your independence is <span className="text-brand-700 dark:text-sky-500">the whole point.</span>
           </h2>
-          <p className="mt-5 sm:mt-6 text-base sm:text-lg text-ink-700 leading-relaxed dark:text-sand-100">
+          <p className="mt-5 sm:mt-6 text-base sm:text-lg text-navy-700 leading-relaxed dark:text-mist-100">
             We started Access Barbados because too many of our own people have had to skip
             appointments, miss family events, or wait on a relative to drive home from town. All
             because the regular taxi wouldn&apos;t work.
           </p>
-          <p className="mt-4 text-base sm:text-lg text-ink-700 leading-relaxed dark:text-sand-100">
+          <p className="mt-4 text-base sm:text-lg text-navy-700 leading-relaxed dark:text-mist-100">
             So we built the service around the trips that matter, and around the people taking
             them.
           </p>
@@ -39,23 +39,23 @@ export default function About() {
 
         {/* Card chrome dropped — divider list lets the points read as quiet
             statements rather than four boxes asking for attention. */}
-        <ul className="divide-y divide-sand-200 dark:divide-ink-700">
+        <ul className="divide-y divide-mist-200 dark:divide-navy-700">
           {highlights.map((h) => (
             <li key={h.title} className="py-5 first:pt-0 last:pb-0">
               <div className="flex items-start gap-3">
                 <span
                   aria-hidden
-                  className="mt-1 inline-flex h-7 w-7 flex-none items-center justify-center rounded-full bg-turquoise-100 text-turquoise-800 dark:bg-turquoise-900/40 dark:text-turquoise-300"
+                  className="mt-1 inline-flex h-7 w-7 flex-none items-center justify-center rounded-full bg-brand-100 text-brand-800 dark:bg-brand-900/40 dark:text-brand-300"
                 >
                   <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
                     <path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2Z" />
                   </svg>
                 </span>
                 <div className="min-w-0">
-                  <h3 className="font-semibold text-ink-900 dark:text-sand-100">
+                  <h3 className="font-semibold text-navy-900 dark:text-mist-100">
                     {h.title}
                   </h3>
-                  <p className="mt-1 text-sm sm:text-base text-ink-700 leading-relaxed dark:text-sand-100/85">
+                  <p className="mt-1 text-sm sm:text-base text-navy-700 leading-relaxed dark:text-mist-100/85">
                     {h.body}
                   </p>
                 </div>

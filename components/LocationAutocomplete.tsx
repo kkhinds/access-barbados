@@ -61,6 +61,13 @@ export default function LocationAutocomplete({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, lat, lng]);
 
+  // aria-activedescendant moves the highlight without moving DOM focus, so the
+  // list will not scroll on its own.
+  useEffect(() => {
+    if (hi < 0) return;
+    document.getElementById(`${id}-opt-${hi}`)?.scrollIntoView({ block: "nearest" });
+  }, [hi, id]);
+
   useEffect(() => {
     function onClick(e: MouseEvent) {
       if (!containerRef.current?.contains(e.target as Node)) setOpen(false);
@@ -140,17 +147,19 @@ export default function LocationAutocomplete({
         aria-expanded={open}
         aria-controls={`${id}-listbox`}
         aria-autocomplete="list"
+        aria-activedescendant={open && hi >= 0 ? `${id}-opt-${hi}` : undefined}
       />
 
       {open && suggestions.length > 0 && (
         <ul
           id={`${id}-listbox`}
           role="listbox"
-          className="absolute z-20 mt-1 w-full max-h-72 overflow-auto rounded-xl border-2 border-ink-600/40 bg-white shadow-soft dark:bg-ink-800 dark:border-ink-700"
+          className="absolute z-20 mt-1 w-full max-h-72 overflow-auto rounded-xl border-2 border-navy-600/40 bg-white shadow-soft dark:bg-navy-800 dark:border-navy-700"
         >
           {suggestions.map((s, i) => (
             <li
               key={s.place_id}
+              id={`${id}-opt-${i}`}
               role="option"
               aria-selected={i === hi}
               onMouseDown={(e) => {
@@ -160,13 +169,13 @@ export default function LocationAutocomplete({
               onMouseEnter={() => setHi(i)}
               className={`px-3 py-2 cursor-pointer text-sm ${
                 i === hi
-                  ? "bg-turquoise-100 text-ink-900 dark:bg-turquoise-900/40 dark:text-sand-100"
-                  : "text-ink-900 dark:text-sand-100"
+                  ? "bg-brand-100 text-navy-900 dark:bg-brand-900/40 dark:text-mist-100"
+                  : "text-navy-900 dark:text-mist-100"
               }`}
             >
               <div className="font-semibold">{s.display_place ?? s.display_name}</div>
               {s.display_address && (
-                <div className="text-xs text-ink-700 dark:text-sand-100/70">
+                <div className="text-xs text-navy-700 dark:text-mist-100/70">
                   {s.display_address}
                 </div>
               )}

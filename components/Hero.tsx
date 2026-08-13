@@ -3,21 +3,23 @@ import { CONTACT, waMessage } from "@/lib/contact";
 export default function Hero() {
   return (
     <section id="top" className="relative overflow-hidden">
-      {/* Soft Caribbean gradient — light by day, deep navy by night */}
+      {/* Blue tint into white, matching the brand applications. Gold is the sun in
+          the mark, so on this page it only carries the pre-launch bar and the
+          panel behind the hours card. */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 bg-gradient-to-br from-turquoise-50 via-sand-50 to-coral-50
-          dark:from-ink-900 dark:via-ink-800 dark:to-ink-900"
+        className="absolute inset-0 -z-10 bg-gradient-to-br from-brand-100 via-brand-50 to-page
+          dark:from-navy-900 dark:via-navy-800 dark:to-navy-900"
       />
       <div
         aria-hidden
-        className="absolute -top-32 -right-32 -z-10 h-[28rem] w-[28rem] rounded-full bg-turquoise-200/40 blur-3xl
-          dark:bg-turquoise-700/25"
+        className="absolute -top-32 -right-32 -z-10 h-[28rem] w-[28rem] rounded-full bg-brand-200/40 blur-3xl
+          dark:bg-brand-700/25"
       />
       <div
         aria-hidden
-        className="absolute -bottom-24 -left-24 -z-10 h-[22rem] w-[22rem] rounded-full bg-coral-200/40 blur-3xl
-          dark:bg-coral-700/20"
+        className="absolute -bottom-24 -left-24 -z-10 h-[22rem] w-[22rem] rounded-full bg-brand-100/50 blur-3xl
+          dark:bg-sky-700/12"
       />
 
       <div className="container-page pt-10 pb-16 sm:pt-16 sm:pb-24 lg:pt-24 lg:pb-32">
@@ -25,10 +27,10 @@ export default function Hero() {
           <div className="lg:col-span-7">
             <span className="eyebrow">Wheelchair-accessible rides • Across Barbados</span>
             <h1 className="h-display mt-3 sm:mt-4">
-              Call us. <span className="text-turquoise-700 dark:text-turquoise-300">We&apos;ll be there.</span>
+              Call us. <span className="text-brand-700 dark:text-brand-300">We&apos;ll be there.</span>
             </h1>
-            <p className="mt-5 sm:mt-6 text-base sm:text-xl text-ink-700 leading-relaxed max-w-2xl
-              dark:text-sand-100">
+            <p className="mt-5 sm:mt-6 text-base sm:text-xl text-navy-700 leading-relaxed max-w-2xl
+              dark:text-mist-100">
               Reliable, accessible transport for Barbadians who need a little extra care getting
               around. Appointments, errands, family time, wherever the day takes you. Schedule
               ahead and ride easy.
@@ -71,8 +73,8 @@ export default function Hero() {
                 "Schedule in advance",
                 "Anywhere on the island",
               ].map((item) => (
-                <li key={item} className="flex items-start gap-2 text-ink-800 dark:text-sand-100">
-                  <svg viewBox="0 0 24 24" className="h-5 w-5 mt-0.5 text-turquoise-600 flex-none dark:text-turquoise-300" fill="currentColor" aria-hidden>
+                <li key={item} className="flex items-start gap-2 text-navy-800 dark:text-mist-100">
+                  <svg viewBox="0 0 24 24" className="h-5 w-5 mt-0.5 text-brand-600 flex-none dark:text-brand-300" fill="currentColor" aria-hidden>
                     <path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2Z" />
                   </svg>
                   <span>{item}</span>
@@ -88,17 +90,17 @@ export default function Hero() {
                 <div className="flex items-start gap-4">
                   <span
                     aria-hidden
-                    className="inline-flex h-12 w-12 flex-none items-center justify-center rounded-full bg-turquoise-100 text-turquoise-700 dark:bg-turquoise-900/40 dark:text-turquoise-300"
+                    className="inline-flex h-12 w-12 flex-none items-center justify-center rounded-full bg-brand-100 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300"
                   >
                     <svg viewBox="0 0 24 24" className="h-6 w-6" fill="currentColor">
                       <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm.5 5h-1v6l5.2 3.2.5-.86L12.5 12.5V7Z" />
                     </svg>
                   </span>
                   <div>
-                    <div className="text-xs uppercase tracking-wider text-turquoise-800 font-semibold dark:text-turquoise-300">
+                    <div className="text-xs uppercase tracking-wider text-brand-800 font-semibold dark:text-brand-300">
                       We&apos;re open
                     </div>
-                    <div className="mt-1 text-lg font-semibold text-ink-900 leading-tight dark:text-sand-100">
+                    <div className="mt-1 text-lg font-semibold text-navy-900 leading-tight dark:text-mist-100">
                       {CONTACT.businessHours}
                     </div>
                   </div>
@@ -106,7 +108,7 @@ export default function Hero() {
               </div>
               <div
                 aria-hidden
-                className="absolute -bottom-4 -right-4 -z-10 h-full w-full rounded-xl2 bg-coral-200/60 dark:bg-coral-700/20"
+                className="absolute -bottom-4 -right-4 -z-10 h-full w-full rounded-xl2 bg-gold-200/70 dark:bg-gold-500/15"
               />
             </div>
           </div>
