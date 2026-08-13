@@ -16,6 +16,15 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40 bg-sand-50/90 backdrop-blur border-b border-sand-100
       dark:bg-ink-900/90 dark:border-ink-800">
+      {/* Pre-launch notice. Delete this block when the service goes live. */}
+      <div
+        role="status"
+        className="bg-coral-600 text-white text-center text-xs sm:text-sm font-semibold px-4 py-2
+          dark:bg-coral-700"
+      >
+        Coming soon — we&apos;re still getting set up. Bookings open shortly.
+      </div>
+
       <div className="container-page flex items-center justify-between h-16 sm:h-20">
         <a href="#top" className="flex items-center gap-2 group min-w-0" aria-label="Access Barbados home">
           <span
