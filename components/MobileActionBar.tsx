@@ -7,7 +7,7 @@ import { CONTACT, waMessage } from "@/lib/contact";
 export default function MobileActionBar() {
   return (
     <div
-      className="md:hidden fixed inset-x-0 bottom-0 z-40 bg-white/95 backdrop-blur border-t border-mist-200 shadow-[0_-8px_24px_-12px_rgba(13,77,76,0.15)]
+      className="md:hidden fixed inset-x-0 bottom-0 z-40 bg-white/95 backdrop-blur-sm border-t border-mist-200 shadow-[0_-8px_24px_-12px_rgba(13,77,76,0.15)]
         dark:bg-navy-900/95 dark:border-navy-800"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       role="navigation"

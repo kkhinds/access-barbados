@@ -104,7 +104,7 @@ export default function Services() {
         <div className="max-w-2xl">
           <span className="eyebrow">What we do</span>
           <h2 className="h-display mt-3 sm:mt-4">Wherever you need to be, we&apos;ve got the ride.</h2>
-          <p className="mt-4 sm:mt-5 text-base sm:text-lg text-navy-700 leading-relaxed dark:text-mist-100">
+          <p className="mt-4 sm:mt-5 text-base sm:text-lg/7 text-navy-700 leading-relaxed dark:text-mist-100">
             One call. We&apos;ll plan the route, the timing, and the help you need.
           </p>
         </div>
@@ -119,7 +119,7 @@ export default function Services() {
                 <span className="block h-5 w-5 sm:h-6 sm:w-6">{s.icon}</span>
               </div>
               <h3 className="mt-3 sm:mt-4 text-base sm:text-lg font-semibold text-navy-900 dark:text-mist-100">{s.title}</h3>
-              <p className="mt-1.5 sm:mt-2 text-sm sm:text-base text-navy-700 leading-relaxed dark:text-mist-100/85">{s.description}</p>
+              <p className="mt-1.5 sm:mt-2 text-sm sm:text-base/6 text-navy-700 leading-relaxed dark:text-mist-100/85">{s.description}</p>
             </article>
           ))}
         </div>

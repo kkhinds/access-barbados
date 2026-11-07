@@ -24,7 +24,7 @@ export default function Footer() {
                 <span className="text-sky-500">Barbados</span>
               </span>
             </div>
-            <p className="mt-4 max-w-md leading-relaxed text-sm sm:text-base">
+            <p className="mt-4 max-w-md leading-relaxed text-sm sm:text-base/6">
               Reliable, wheelchair-accessible rides for Barbadians. Planned around your day,
               not ours.
             </p>

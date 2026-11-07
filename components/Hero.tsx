@@ -8,17 +8,17 @@ export default function Hero() {
           panel behind the hours card. */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 bg-gradient-to-br from-brand-100 via-brand-50 to-page
+        className="absolute inset-0 -z-10 bg-linear-to-br from-brand-100 via-brand-50 to-page
           dark:from-navy-900 dark:via-navy-800 dark:to-navy-900"
       />
       <div
         aria-hidden
-        className="absolute -top-32 -right-32 -z-10 h-[28rem] w-[28rem] rounded-full bg-brand-200/40 blur-3xl
+        className="absolute -top-32 -right-32 -z-10 h-112 w-md rounded-full bg-brand-200/40 blur-3xl
           dark:bg-brand-700/25"
       />
       <div
         aria-hidden
-        className="absolute -bottom-24 -left-24 -z-10 h-[22rem] w-[22rem] rounded-full bg-brand-100/50 blur-3xl
+        className="absolute -bottom-24 -left-24 -z-10 h-88 w-88 rounded-full bg-brand-100/50 blur-3xl
           dark:bg-sky-700/12"
       />
 
@@ -29,7 +29,7 @@ export default function Hero() {
             <h1 className="h-display mt-3 sm:mt-4">
               Call us. <span className="text-brand-700 dark:text-brand-300">We&apos;ll be there.</span>
             </h1>
-            <p className="mt-5 sm:mt-6 text-base sm:text-xl text-navy-700 leading-relaxed max-w-2xl
+            <p className="mt-5 sm:mt-6 text-base sm:text-xl/7 text-navy-700 leading-relaxed max-w-2xl
               dark:text-mist-100">
               Reliable, accessible transport for Barbadians who need a little extra care getting
               around. Appointments, errands, family time, wherever the day takes you. Schedule

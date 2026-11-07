@@ -128,13 +128,13 @@ export default function BookingForm() {
   }
 
   return (
-    <section id="book" className="section bg-gradient-to-b from-brand-50/60 to-page
+    <section id="book" className="section bg-linear-to-b from-brand-50/60 to-page
       dark:from-navy-800 dark:to-navy-900">
       <div className="container-page">
         <div className="max-w-3xl mx-auto text-center">
           <span className="eyebrow">Schedule a ride</span>
           <h2 className="h-display mt-3 sm:mt-4">Tell us where you need to go.</h2>
-          <p className="mt-4 sm:mt-5 max-w-xl mx-auto text-base sm:text-lg text-navy-700 leading-relaxed dark:text-mist-100">
+          <p className="mt-4 sm:mt-5 max-w-xl mx-auto text-base sm:text-lg/7 text-navy-700 leading-relaxed dark:text-mist-100">
             Name and phone is all we need to get started. Share as much else as you like.
             We&apos;ll call back to confirm pickup time, address, and anything special you need.
           </p>
@@ -294,8 +294,8 @@ export default function BookingForm() {
                   ].map((m) => (
                     <label
                       key={m}
-                      className="flex items-center gap-3 rounded-xl border-2 border-navy-600/30 bg-white px-3 py-3 min-h-[48px] hover:border-brand-700 has-[:checked]:border-brand-700 has-[:checked]:bg-brand-50 cursor-pointer transition
-                        dark:bg-navy-900 dark:border-navy-700 dark:hover:border-brand-400 dark:has-[:checked]:border-brand-400 dark:has-[:checked]:bg-brand-900/30"
+                      className="flex items-center gap-3 rounded-xl border-2 border-navy-600/30 bg-white px-3 py-3 min-h-[48px] hover:border-brand-700 has-checked:border-brand-700 has-checked:bg-brand-50 cursor-pointer transition
+                        dark:bg-navy-900 dark:border-navy-700 dark:hover:border-brand-400 dark:has-checked:border-brand-400 dark:has-checked:bg-brand-900/30"
                     >
                       <input type="checkbox" name="mobility" value={m} className="h-5 w-5 accent-brand-600 flex-none dark:accent-brand-400" />
                       <span className="text-sm sm:text-base text-navy-800 dark:text-mist-100">{m}</span>

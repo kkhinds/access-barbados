@@ -26,12 +26,12 @@ export default function About() {
           <h2 className="h-display mt-3 sm:mt-4">
             Your independence is <span className="text-brand-700 dark:text-sky-500">the whole point.</span>
           </h2>
-          <p className="mt-5 sm:mt-6 text-base sm:text-lg text-navy-700 leading-relaxed dark:text-mist-100">
+          <p className="mt-5 sm:mt-6 text-base sm:text-lg/7 text-navy-700 leading-relaxed dark:text-mist-100">
             We started Access Barbados because too many of our own people have had to skip
             appointments, miss family events, or wait on a relative to drive home from town. All
             because the regular taxi wouldn&apos;t work.
           </p>
-          <p className="mt-4 text-base sm:text-lg text-navy-700 leading-relaxed dark:text-mist-100">
+          <p className="mt-4 text-base sm:text-lg/7 text-navy-700 leading-relaxed dark:text-mist-100">
             So we built the service around the trips that matter, and around the people taking
             them.
           </p>
@@ -55,7 +55,7 @@ export default function About() {
                   <h3 className="font-semibold text-navy-900 dark:text-mist-100">
                     {h.title}
                   </h3>
-                  <p className="mt-1 text-sm sm:text-base text-navy-700 leading-relaxed dark:text-mist-100/85">
+                  <p className="mt-1 text-sm sm:text-base/6 text-navy-700 leading-relaxed dark:text-mist-100/85">
                     {h.body}
                   </p>
                 </div>

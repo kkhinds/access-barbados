@@ -105,7 +105,7 @@ export default function Contact() {
         <div>
           <span className="eyebrow">Reach us</span>
           <h2 className="h-display mt-3 sm:mt-4">Pick up the phone. We&apos;re listening.</h2>
-          <p className="mt-4 sm:mt-5 text-base sm:text-lg text-navy-700 leading-relaxed dark:text-mist-100">
+          <p className="mt-4 sm:mt-5 text-base sm:text-lg/7 text-navy-700 leading-relaxed dark:text-mist-100">
             Call, WhatsApp, or email. Whichever&apos;s easiest. We answer during the day and get
             back to after-hours messages first thing the next morning.
           </p>

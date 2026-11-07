@@ -1,6 +1,160 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@custom-variant dark (@media (prefers-color-scheme: dark));
+
+@theme {
+  /* Palette follows the Access Barbados brand guide:
+       #0B1D3A navy · #1166CC blue · #2FB1FF light blue · #FFC20E gold · #6B7280 gray
+     The brand gray is Tailwind's own gray-500, so it needs no token here.
+     Every value below carries the contrast ratio it was chosen for. */
+
+  /* The page ground. Deliberately a soft blue rather than white: large white
+     fields glare and wash out for low-vision readers, and a tinted ground
+     makes the white cards read as distinct surfaces. Navy body text still
+     measures 13.9:1 here, well past AAA. */
+  --color-page: #e2ebf6;
+
+  /* Cool near-whites. Card borders and dividers, and light text on navy. */
+  --color-mist-50: #f4f7fb;
+  --color-mist-100: #e4ebf5; /* on navy-900 ~14:1 */
+  --color-mist-200: #cdd9ea;
+  --color-mist-300: #a9bcd6;
+  --color-mist-400: #8aa1c2;
+
+  /* Neutral scale, navy-tinted. Doubles as the dark-mode surface ramp. */
+  --color-navy-300: #c3d0e2; /* on dark bg only */
+  --color-navy-400: #93a6c0; /* on dark bg only */
+  --color-navy-500: #47608a; /* borders, decorative */
+  --color-navy-600: #2f4671; /* meta / labels — 8.7:1 on mist-50 */
+  --color-navy-700: #1e3358; /* secondary body — 11.7:1 on mist-50 */
+  --color-navy-800: #142744; /* headings / strong text, dark card surface */
+  --color-navy-900: #0b1d3a; /* brand navy — body text on light, deepest surface */
+
+  /* Brand blue. 700 is the exact brand value and carries every primary action. */
+  --color-brand-50: #eef5ff;
+  --color-brand-100: #d9e8ff;
+  --color-brand-200: #aecfff;
+  --color-brand-300: #6fadff; /* dark-mode link/accent on navy */
+  --color-brand-400: #3d8bf0;
+  --color-brand-500: #2b7ae8;
+  --color-brand-600: #1a6fd8;
+  --color-brand-700: #1166cc; /* brand blue — button bg, 5.5:1 with white */
+  --color-brand-800: #0d51a4; /* hover, and link text on light — 7.7:1 */
+  --color-brand-900: #0a3f7e;
+
+  /* Brand light blue. Reads only on navy: 2.4:1 on white, so never a light-mode text color. */
+  --color-sky-100: #d6efff;
+  --color-sky-300: #7fcbff;
+  --color-sky-500: #2fb1ff; /* brand light blue — 7.1:1 on navy-900 */
+  --color-sky-700: #0e8fe0;
+
+  /* Brand gold. The sun in the mark. Pairs with navy text at 10.4:1, never with white. */
+  --color-gold-100: #fff4d1;
+  --color-gold-200: #ffe49a;
+  --color-gold-400: #ffc20e; /* brand gold */
+  --color-gold-500: #e8ae00;
+  --color-gold-700: #8a6800; /* gold-toned text on light — 5.6:1 */
+
+  /* Errors only. The brand has no red, and error states are functional, not brand. */
+  --color-alert-50: #fdecea;
+  --color-alert-200: #f7bdb6;
+  --color-alert-300: #ff9d8b; /* on navy-800 ~7.4:1 */
+  --color-alert-400: #f4695a;
+  --color-alert-600: #c0261a; /* 5.9:1 on white */
+  --color-alert-700: #b32317; /* 6.6:1 on white */
+  --color-alert-800: #8f1c12;
+
+  --color-whatsapp-50: #dcf8c6; /* soft tint, icon-circle background */
+  --color-whatsapp-500: #25d366; /* primary brand green — icons + accents */
+  --color-whatsapp-700: #0e7a6e; /* darker brand green — button bg, 5.2:1 with white text */
+  --color-whatsapp-900: #075e54; /* deep teal — icons on light tint, AAA */
+
+  /* Montserrat throughout, per the brand guide. */
+  --font-sans:
+    Montserrat, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+    Helvetica, Arial, sans-serif;
+  --font-display: Montserrat, ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-soft: 0 10px 30px -12px rgba(11, 29, 58, 0.22);
+  --shadow-card: 0 8px 24px -10px rgba(11, 29, 58, 0.18);
+
+  --radius-xl2: 1.25rem;
+}
+
+@layer base {
+  /* v4 gives buttons the default cursor; keep v3's pointer. */
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+@utility container-page {
+  @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
+}
+
+@utility btn {
+  /* Focus comes from the global 3px :focus-visible outline. A Tailwind ring
+     here would paint its default blue on top of it. */
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-5 sm:px-6 py-3 text-base font-semibold transition-all duration-200;
+  min-height: 48px;
+}
+
+@utility btn-primary {
+  /* brand-700 (#1166CC) with white: 5.5:1. Dark: brand light blue on navy, 7.1:1 */
+  @apply btn bg-brand-700 text-white shadow-soft hover:bg-brand-800 active:translate-y-px
+      dark:bg-sky-500 dark:text-navy-900 dark:hover:bg-sky-300;
+}
+
+@utility btn-secondary {
+  /* brand-800 text on white: 7.7:1. Dark: mist-100 text on navy-800 ~13:1 */
+  @apply btn bg-white text-brand-800 border-2 border-brand-700 hover:bg-brand-50
+      dark:bg-navy-800 dark:text-mist-100 dark:border-sky-500 dark:hover:bg-navy-700;
+}
+
+@utility btn-whatsapp {
+  /* whatsapp-700 on white text: 5.2:1, passes AA at this 18px/600 size. */
+  @apply btn bg-whatsapp-700 text-white shadow-soft hover:bg-whatsapp-900 active:translate-y-px
+      dark:bg-whatsapp-500 dark:text-navy-900 dark:hover:bg-whatsapp-700 dark:hover:text-white;
+}
+
+@utility section {
+  @apply py-14 sm:py-20 lg:py-24;
+}
+
+@utility eyebrow {
+  /* brand-800 on light 7.2:1, sky-500 on navy 7.1:1 */
+  @apply inline-block text-xs sm:text-sm font-semibold uppercase tracking-[0.14em] text-brand-800
+      dark:text-sky-500;
+}
+
+@utility h-display {
+  @apply font-display text-[1.75rem] leading-[1.15] sm:text-4xl/10 lg:text-5xl/none font-bold tracking-tight text-balance text-navy-900
+      dark:text-mist-100;
+}
+
+@utility card {
+  /* White card on the tinted ground. The border is mist-200 rather than mist-100
+     so the card edge stays findable against the blue page. */
+  @apply bg-white rounded-xl2 shadow-card p-5 sm:p-7 lg:p-8 border border-mist-200
+      dark:bg-navy-800 dark:border-navy-700 dark:shadow-none;
+}
+
+@utility field-label {
+  @apply block text-base font-semibold text-navy-900 mb-2
+      dark:text-mist-100;
+}
+
+@utility field-input {
+  /* 2px border for visibility. Dark: navy-900 surface with mist text */
+  @apply block w-full rounded-xl border-2 border-navy-600/40 bg-white px-4 py-3 text-base text-navy-900 placeholder:text-navy-600 shadow-xs transition focus:border-brand-700 focus:outline-hidden focus:ring-2 focus:ring-brand-700/40
+      dark:bg-navy-900 dark:border-navy-700 dark:text-mist-100 dark:placeholder:text-navy-400 dark:focus:border-sky-500 dark:focus:ring-sky-500/30;
+  min-height: 48px;
+
+  &:disabled {
+    @apply bg-page text-navy-600 cursor-not-allowed
+      dark:bg-navy-800 dark:text-navy-400;
+  }
+}
 
 @layer base {
   html {
@@ -117,75 +271,5 @@
     :focus-visible {
       outline: 3px solid Highlight;
     }
-  }
-}
-
-@layer components {
-  .container-page {
-    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
-  }
-
-  /* Focus comes from the global 3px :focus-visible outline. A Tailwind ring
-     here would paint its default blue on top of it. */
-  .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 sm:px-6 py-3 text-base font-semibold transition-all duration-200;
-    min-height: 48px;
-  }
-
-  .btn-primary {
-    /* brand-700 (#1166CC) with white: 5.5:1. Dark: brand light blue on navy, 7.1:1 */
-    @apply btn bg-brand-700 text-white shadow-soft hover:bg-brand-800 active:translate-y-px
-      dark:bg-sky-500 dark:text-navy-900 dark:hover:bg-sky-300;
-  }
-
-  .btn-secondary {
-    /* brand-800 text on white: 7.7:1. Dark: mist-100 text on navy-800 ~13:1 */
-    @apply btn bg-white text-brand-800 border-2 border-brand-700 hover:bg-brand-50
-      dark:bg-navy-800 dark:text-mist-100 dark:border-sky-500 dark:hover:bg-navy-700;
-  }
-
-  .btn-whatsapp {
-    /* whatsapp-700 on white text: 5.2:1, passes AA at this 18px/600 size. */
-    @apply btn bg-whatsapp-700 text-white shadow-soft hover:bg-whatsapp-900 active:translate-y-px
-      dark:bg-whatsapp-500 dark:text-navy-900 dark:hover:bg-whatsapp-700 dark:hover:text-white;
-  }
-
-  .section {
-    @apply py-14 sm:py-20 lg:py-24;
-  }
-
-  .eyebrow {
-    /* brand-800 on light 7.2:1, sky-500 on navy 7.1:1 */
-    @apply inline-block text-xs sm:text-sm font-semibold uppercase tracking-[0.14em] text-brand-800
-      dark:text-sky-500;
-  }
-
-  .h-display {
-    @apply font-display text-[1.75rem] leading-[1.15] sm:text-4xl lg:text-5xl font-bold tracking-tight text-balance text-navy-900
-      dark:text-mist-100;
-  }
-
-  /* White card on the tinted ground. The border is mist-200 rather than mist-100
-     so the card edge stays findable against the blue page. */
-  .card {
-    @apply bg-white rounded-xl2 shadow-card p-5 sm:p-7 lg:p-8 border border-mist-200
-      dark:bg-navy-800 dark:border-navy-700 dark:shadow-none;
-  }
-
-  .field-label {
-    @apply block text-base font-semibold text-navy-900 mb-2
-      dark:text-mist-100;
-  }
-
-  .field-input {
-    /* 2px border for visibility. Dark: navy-900 surface with mist text */
-    @apply block w-full rounded-xl border-2 border-navy-600/40 bg-white px-4 py-3 text-base text-navy-900 placeholder:text-navy-600 shadow-sm transition focus:border-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-700/40
-      dark:bg-navy-900 dark:border-navy-700 dark:text-mist-100 dark:placeholder:text-navy-400 dark:focus:border-sky-500 dark:focus:ring-sky-500/30;
-    min-height: 48px;
-  }
-
-  .field-input:disabled {
-    @apply bg-page text-navy-600 cursor-not-allowed
-      dark:bg-navy-800 dark:text-navy-400;
   }
 }

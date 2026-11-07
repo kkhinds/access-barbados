@@ -34,7 +34,7 @@ export default function Header() {
   return (
     <header
       ref={headerRef}
-      className="sticky top-0 z-40 bg-page/90 backdrop-blur border-b border-mist-200
+      className="sticky top-0 z-40 bg-page/90 backdrop-blur-sm border-b border-mist-200
       dark:bg-navy-900/90 dark:border-navy-800"
     >
       {/* Pre-launch notice. Delete this block when the service goes live. */}
@@ -80,7 +80,7 @@ export default function Header() {
               {l.label}
             </a>
           ))}
-          <a href={`tel:${CONTACT.phoneTel}`} className="btn-primary !py-2.5 !px-5 !text-sm">
+          <a href={`tel:${CONTACT.phoneTel}`} className="btn-primary py-2.5! px-5! text-sm!">
             Call Now
           </a>
         </nav>

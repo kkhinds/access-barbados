@@ -6,9 +6,9 @@ Wheelchair-accessible transportation across Barbados. Marketing site for the ser
 
 ## Tech
 
-- Next.js 15 (static export)
-- TypeScript
-- Tailwind CSS
+- Next.js 16 (static export), React 19
+- TypeScript 7, Node 26 LTS
+- Tailwind CSS 4 (theme lives in `app/globals.css`)
 - Deployed to GitHub Pages via GitHub Actions, custom domain `accessbim.com`
 
 ## Local development
