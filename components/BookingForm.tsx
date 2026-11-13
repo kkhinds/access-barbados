@@ -4,11 +4,12 @@ import { useState } from "react";
 import { CONTACT } from "@/lib/contact";
 import TurnstileWidget from "./TurnstileWidget";
 import LocationAutocomplete from "./LocationAutocomplete";
+import FareQuote from "./FareQuote";
 import { FareSummary, fareLine, useRideQuote } from "./RideQuote";
 import servicesData from "@/lib/services.json";
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
-// Without a LocationIQ token the fare does not render.
+// Without a LocationIQ token there is no quote card and no fare; the form asks for the places itself.
 const LOCATIONIQ_TOKEN = process.env.NEXT_PUBLIC_LOCATIONIQ_TOKEN ?? "";
 
 type Status = "idle" | "submitting" | "success" | "error";
@@ -27,7 +28,7 @@ export default function BookingForm() {
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [turnstileToken, setTurnstileToken] = useState<string>("");
   const [sent, setSent] = useState<Sent>(null);
-  // Places and fare are shared with the hero's quote card.
+  // Places and fare are shared with the quote card beside the form.
   const { pickup, dropoff, quote, typePoint, clearPins } = useRideQuote();
 
   function succeed(form: HTMLFormElement) {
@@ -159,264 +160,261 @@ export default function BookingForm() {
           </p>
         </div>
 
-        <div className="mt-10 sm:mt-12 max-w-3xl mx-auto card shadow-soft">
-          {status === "success" ? (
-            <div className="text-center py-6 sm:py-8" role="status" aria-live="polite">
-              <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-brand-100 text-brand-800
-                dark:bg-brand-900/40 dark:text-brand-300">
-                <svg viewBox="0 0 24 24" className="h-7 w-7" fill="currentColor" aria-hidden>
-                  <path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2Z" />
-                </svg>
-              </div>
-              <h3 className="mt-4 text-xl sm:text-2xl font-bold text-navy-900 dark:text-mist-100">We&apos;ve got it.</h3>
-              <p className="mt-3 text-base text-navy-700 max-w-md mx-auto dark:text-mist-100/85">
-                Thanks. We&apos;ll call you back to confirm the pickup. If you need the ride today,
-                give us a ring directly so we can sort it on the spot.
-              </p>
-              {sent && (
-                <p className="mt-3 text-base text-navy-700 max-w-md mx-auto dark:text-mist-100/85">
-                  {sent === "unquoted"
-                    ? "We'll confirm your fare when we call."
-                    : `Estimated fare: ${fareLine(sent)}. We'll confirm the final fare when we call.`}
-                </p>
-              )}
-              <div className="mt-6 grid grid-cols-1 sm:flex sm:flex-wrap sm:justify-center gap-3">
-                <a href={`tel:${CONTACT.phoneTel}`} className="btn-primary">
-                  Call {CONTACT.phoneDisplay}
-                </a>
-                <button
-                  type="button"
-                  onClick={() => setStatus("idle")}
-                  className="btn-secondary"
-                >
-                  Book another ride
-                </button>
-              </div>
-            </div>
-          ) : (
-            <form onSubmit={onSubmit} className="grid gap-5 sm:grid-cols-2" noValidate>
-              <div className="sm:col-span-1">
-                <LocationAutocomplete
-                  id="pickupLocation"
-                  label={
-                    <>
-                      Pickup location <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
-                    </>
-                  }
-                  placeholder="Home address, hospital, hotel, landmark…"
-                  value={pickup}
-                  onChange={(v) => typePoint("pickup", v)}
-                />
-              </div>
-
-              <div className="sm:col-span-1">
-                <LocationAutocomplete
-                  id="dropoffLocation"
-                  label={
-                    <>
-                      Drop-off location <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
-                    </>
-                  }
-                  placeholder="Destination"
-                  value={dropoff}
-                  onChange={(v) => typePoint("dropoff", v)}
-                />
-              </div>
-
-              {LOCATIONIQ_TOKEN && (
-                <p className="sm:col-span-2 -mt-2">
-                  <a
-                    href="#quote"
-                    className="inline-flex min-h-[48px] items-center font-semibold text-brand-800 underline underline-offset-2 decoration-2
-                      hover:decoration-gold-500 dark:text-brand-300 dark:hover:decoration-gold-400"
-                  >
-                    Change these on the map
-                  </a>
-                </p>
-              )}
-
-              <div className="sm:col-span-1">
-                <label htmlFor="name" className="field-label">
-                  Full name <span className="text-alert-700 dark:text-alert-300" aria-hidden>*</span>
-                  <span className="sr-only">(required)</span>
-                </label>
-                <input id="name" name="name" required className="field-input" autoComplete="name" />
-              </div>
-
-              <div className="sm:col-span-1">
-                <label htmlFor="phone" className="field-label">
-                  Phone <span className="text-alert-700 dark:text-alert-300" aria-hidden>*</span>
-                  <span className="sr-only">(required)</span>
-                </label>
-                <input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  required
-                  className="field-input"
-                  autoComplete="tel"
-                  inputMode="tel"
-                  placeholder="e.g. +1 (246) 555-0123"
-                />
-              </div>
-
-              <div className="sm:col-span-2">
-                <label htmlFor="email" className="field-label">
-                  Email <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  className="field-input"
-                  autoComplete="email"
-                  placeholder="you@example.com"
-                />
-              </div>
-
-              <div className="sm:col-span-1">
-                <label htmlFor="pickupDate" className="field-label">
-                  Pickup date <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
-                </label>
-                <input id="pickupDate" name="pickupDate" type="date" className="field-input" />
-              </div>
-
-              <div className="sm:col-span-1">
-                <label htmlFor="pickupTime" className="field-label">
-                  Pickup time <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
-                </label>
-                <input id="pickupTime" name="pickupTime" type="time" className="field-input" />
-              </div>
-
-              <div className="sm:col-span-1">
-                <label htmlFor="serviceType" className="field-label">
-                  Service type <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
-                </label>
-                <select id="serviceType" name="serviceType" className="field-input">
-                  <option value="">Choose a service…</option>
-                  {serviceOptions.map((s) => (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="sm:col-span-1">
-                <label htmlFor="passengers" className="field-label">
-                  Number of passengers <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
-                </label>
-                <input
-                  id="passengers"
-                  name="passengers"
-                  type="number"
-                  min={1}
-                  max={20}
-                  className="field-input"
-                  placeholder="1"
-                />
-              </div>
-
-              <fieldset className="sm:col-span-2">
-                <legend className="field-label">
-                  Mobility needs <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional, select any)</span>
-                </legend>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-                  {[
-                    "Wheelchair user",
-                    "Walker",
-                    "Cane",
-                    "Oxygen tank",
-                    "Caregiver riding along",
-                    "Extra boarding time",
-                  ].map((m) => (
-                    <label
-                      key={m}
-                      className="flex items-center gap-3 rounded-xl border-2 border-navy-600/30 bg-white px-3 py-3 min-h-[48px] hover:border-brand-700 has-checked:border-brand-700 has-checked:bg-brand-50 cursor-pointer transition
-                        dark:bg-navy-900 dark:border-navy-700 dark:hover:border-brand-400 dark:has-checked:border-brand-400 dark:has-checked:bg-brand-900/30"
-                    >
-                      <input type="checkbox" name="mobility" value={m} className="h-5 w-5 accent-brand-600 flex-none dark:accent-brand-400" />
-                      <span className="text-sm sm:text-base text-navy-800 dark:text-mist-100">{m}</span>
-                    </label>
-                  ))}
+        {/* From 1024px: card left (two fifths), form right. Below: card first, form under it.
+            No items-start: the left column stretches so the fare box can stick beside the form. */}
+        <div className={LOCATIONIQ_TOKEN ? "mt-10 sm:mt-12 grid gap-6 lg:grid-cols-[2fr_3fr] lg:gap-8" : "mt-10 sm:mt-12 max-w-3xl mx-auto"}>
+          {LOCATIONIQ_TOKEN && <div><FareQuote /></div>}
+          <div className="card shadow-soft">
+            {status === "success" ? (
+              <div className="text-center py-6 sm:py-8" role="status" aria-live="polite">
+                <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-brand-100 text-brand-800
+                  dark:bg-brand-900/40 dark:text-brand-300">
+                  <svg viewBox="0 0 24 24" className="h-7 w-7" fill="currentColor" aria-hidden>
+                    <path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2Z" />
+                  </svg>
                 </div>
-              </fieldset>
-
-              <div className="sm:col-span-2">
-                <label htmlFor="notes" className="field-label">
-                  Anything else? <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
-                </label>
-                <textarea
-                  id="notes"
-                  name="notes"
-                  rows={4}
-                  className="field-input resize-none"
-                  placeholder="Recurring weekly rides, multiple stops, things we should know to help you better…"
-                />
+                <h3 className="mt-4 text-xl sm:text-2xl font-bold text-navy-900 dark:text-mist-100">We&apos;ve got it.</h3>
+                <p className="mt-3 text-base text-navy-700 max-w-md mx-auto dark:text-mist-100/85">
+                  Thanks. We&apos;ll call you back to confirm the pickup. If you need the ride today,
+                  give us a ring directly so we can sort it on the spot.
+                </p>
+                {sent && (
+                  <p className="mt-3 text-base text-navy-700 max-w-md mx-auto dark:text-mist-100/85">
+                    {sent === "unquoted"
+                      ? "We'll confirm your fare when we call."
+                      : `Estimated fare: ${fareLine(sent)}. We'll confirm the final fare when we call.`}
+                  </p>
+                )}
+                <div className="mt-6 grid grid-cols-1 sm:flex sm:flex-wrap sm:justify-center gap-3">
+                  <a href={`tel:${CONTACT.phoneTel}`} className="btn-primary">
+                    Call {CONTACT.phoneDisplay}
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => setStatus("idle")}
+                    className="btn-secondary"
+                  >
+                    Book another ride
+                  </button>
+                </div>
               </div>
+            ) : (
+              <form onSubmit={onSubmit} className="grid gap-5 sm:grid-cols-2 items-end" noValidate>
+                {!LOCATIONIQ_TOKEN && (
+                  <>
+                  <div className="sm:col-span-1">
+                    <LocationAutocomplete
+                      id="pickupLocation"
+                      label={
+                        <>
+                          Pickup location <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
+                        </>
+                      }
+                      placeholder="Home address, hospital, hotel, landmark…"
+                      value={pickup}
+                      onChange={(v) => typePoint("pickup", v)}
+                    />
+                  </div>
 
-              {/* Honeypot — should remain empty */}
-              <div className="hidden" aria-hidden="true">
-                <label>
-                  Leave this field empty
-                  <input name="company" tabIndex={-1} autoComplete="off" />
-                </label>
-              </div>
+                  <div className="sm:col-span-1">
+                    <LocationAutocomplete
+                      id="dropoffLocation"
+                      label={
+                        <>
+                          Drop-off location <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
+                        </>
+                      }
+                      placeholder="Destination"
+                      value={dropoff}
+                      onChange={(v) => typePoint("dropoff", v)}
+                    />
+                  </div>
+                  </>
+                )}
 
-              {TURNSTILE_SITE_KEY && (
-                <div className="sm:col-span-2">
-                  <TurnstileWidget
-                    siteKey={TURNSTILE_SITE_KEY}
-                    onToken={(t) => setTurnstileToken(t)}
-                    onExpire={() => setTurnstileToken("")}
-                    onError={() => setTurnstileToken("")}
+                <div className="sm:col-span-1">
+                  <label htmlFor="name" className="field-label">
+                    Full name <span className="text-alert-700 dark:text-alert-300" aria-hidden>*</span>
+                    <span className="sr-only">(required)</span>
+                  </label>
+                  <input id="name" name="name" required className="field-input" autoComplete="name" />
+                </div>
+
+                <div className="sm:col-span-1">
+                  <label htmlFor="phone" className="field-label">
+                    Phone <span className="text-alert-700 dark:text-alert-300" aria-hidden>*</span>
+                    <span className="sr-only">(required)</span>
+                  </label>
+                  <input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    required
+                    className="field-input"
+                    autoComplete="tel"
+                    inputMode="tel"
+                    placeholder="e.g. +1 (246) 555-0123"
                   />
                 </div>
-              )}
 
-              {status === "error" && (
-                <div
-                  role="alert"
-                  aria-live="assertive"
-                  className="sm:col-span-2 rounded-xl border-2 border-alert-600 bg-alert-50 px-4 py-3 text-alert-800 font-medium
-                    dark:bg-alert-800/30 dark:border-alert-400 dark:text-alert-200"
-                >
-                  <span className="sr-only">Error: </span>
-                  {errorMsg || "Something went wrong. Please try again or call us."}
+                <div className="sm:col-span-2">
+                  <label htmlFor="email" className="field-label">
+                    Email <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    className="field-input"
+                    autoComplete="email"
+                    placeholder="you@example.com"
+                  />
                 </div>
-              )}
 
-              {LOCATIONIQ_TOKEN && quote && quote.state !== "same" && (
-                // Not a live region: RideQuoteProvider announces the fare once for the page.
-                <div
-                  className="sm:col-span-2 rounded-xl border-2 border-brand-700/40 bg-brand-50 px-4 py-3 text-base text-navy-800
-                    dark:border-sky-500/50 dark:bg-navy-900 dark:text-mist-100"
-                >
-                  <FareSummary quote={quote} />
+                <div className="sm:col-span-1">
+                  <label htmlFor="pickupDate" className="field-label">
+                    Pickup date <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
+                  </label>
+                  <input id="pickupDate" name="pickupDate" type="date" className="field-input" />
                 </div>
-              )}
 
-              <div className="sm:col-span-2 flex flex-col-reverse sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-4 pt-2">
-                <p className="text-sm text-navy-700 text-center sm:text-left dark:text-mist-100/85">
-                  Prefer to talk? Call{" "}
-                  <a
-                    href={`tel:${CONTACT.phoneTel}`}
-                    className="font-semibold text-brand-800 underline underline-offset-2 decoration-2 hover:decoration-gold-500
-                      dark:text-brand-300 dark:hover:decoration-gold-400"
+                <div className="sm:col-span-1">
+                  <label htmlFor="pickupTime" className="field-label">
+                    Pickup time <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
+                  </label>
+                  <input id="pickupTime" name="pickupTime" type="time" className="field-input" />
+                </div>
+
+                <div className="sm:col-span-1">
+                  <label htmlFor="serviceType" className="field-label">
+                    Service type <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
+                  </label>
+                  <select id="serviceType" name="serviceType" className="field-input">
+                    <option value="">Choose a service…</option>
+                    {serviceOptions.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="sm:col-span-1">
+                  <label htmlFor="passengers" className="field-label">
+                    Number of passengers <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
+                  </label>
+                  <input
+                    id="passengers"
+                    name="passengers"
+                    type="number"
+                    min={1}
+                    max={20}
+                    className="field-input"
+                    placeholder="1"
+                  />
+                </div>
+
+                <fieldset className="sm:col-span-2">
+                  <legend className="field-label">
+                    Mobility needs <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional, select any)</span>
+                  </legend>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                    {[
+                      "Wheelchair user",
+                      "Walker",
+                      "Cane",
+                      "Oxygen tank",
+                      "Caregiver riding along",
+                      "Extra boarding time",
+                    ].map((m) => (
+                      <label
+                        key={m}
+                        className="flex items-center gap-3 rounded-xl border-2 border-navy-600/30 bg-white px-3 py-3 min-h-[48px] hover:border-brand-700 has-checked:border-brand-700 has-checked:bg-brand-50 cursor-pointer transition
+                          dark:bg-navy-900 dark:border-navy-700 dark:hover:border-brand-400 dark:has-checked:border-brand-400 dark:has-checked:bg-brand-900/30"
+                      >
+                        <input type="checkbox" name="mobility" value={m} className="h-5 w-5 accent-brand-600 flex-none dark:accent-brand-400" />
+                        <span className="text-sm sm:text-base text-navy-800 dark:text-mist-100">{m}</span>
+                      </label>
+                    ))}
+                  </div>
+                </fieldset>
+
+                <div className="sm:col-span-2">
+                  <label htmlFor="notes" className="field-label">
+                    Anything else? <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
+                  </label>
+                  <textarea
+                    id="notes"
+                    name="notes"
+                    rows={4}
+                    className="field-input resize-none"
+                    placeholder="Recurring weekly rides, multiple stops, things we should know to help you better…"
+                  />
+                </div>
+
+                {/* Honeypot — should remain empty */}
+                <div className="hidden" aria-hidden="true">
+                  <label>
+                    Leave this field empty
+                    <input name="company" tabIndex={-1} autoComplete="off" />
+                  </label>
+                </div>
+
+                {TURNSTILE_SITE_KEY && (
+                  <div className="sm:col-span-2">
+                    <TurnstileWidget
+                      siteKey={TURNSTILE_SITE_KEY}
+                      onToken={(t) => setTurnstileToken(t)}
+                      onExpire={() => setTurnstileToken("")}
+                      onError={() => setTurnstileToken("")}
+                    />
+                  </div>
+                )}
+
+                {status === "error" && (
+                  <div
+                    role="alert"
+                    aria-live="assertive"
+                    className="sm:col-span-2 rounded-xl border-2 border-alert-600 bg-alert-50 px-4 py-3 text-alert-800 font-medium
+                      dark:bg-alert-800/30 dark:border-alert-400 dark:text-alert-200"
                   >
-                    {CONTACT.phoneDisplay}
-                  </a>
-                </p>
-                <button
-                  type="submit"
-                  disabled={status === "submitting"}
-                  className="btn-primary w-full sm:w-auto disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  {status === "submitting" ? "Sending…" : "Request My Ride"}
-                </button>
-              </div>
-            </form>
-          )}
+                    <span className="sr-only">Error: </span>
+                    {errorMsg || "Something went wrong. Please try again or call us."}
+                  </div>
+                )}
+
+                {LOCATIONIQ_TOKEN && quote && quote.state !== "same" && (
+                  // Not a live region: RideQuoteProvider announces the fare once for the page.
+                  <div
+                    className="sm:col-span-2 lg:hidden rounded-xl border-2 border-brand-700/40 bg-brand-50 px-4 py-3 text-base text-navy-800
+                      dark:border-sky-500/50 dark:bg-navy-900 dark:text-mist-100"
+                  >
+                    <FareSummary quote={quote} />
+                  </div>
+                )}
+
+                <div className="sm:col-span-2 flex flex-col-reverse sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-4 pt-2">
+                  <p className="text-sm text-navy-700 text-center sm:text-left dark:text-mist-100/85">
+                    Prefer to talk? Call{" "}
+                    <a
+                      href={`tel:${CONTACT.phoneTel}`}
+                      className="font-semibold text-brand-800 underline underline-offset-2 decoration-2 hover:decoration-gold-500
+                        dark:text-brand-300 dark:hover:decoration-gold-400"
+                    >
+                      {CONTACT.phoneDisplay}
+                    </a>
+                  </p>
+                  <button
+                    type="submit"
+                    disabled={status === "submitting"}
+                    className="btn-primary w-full sm:w-auto disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {status === "submitting" ? "Sending…" : "Request My Ride"}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
         </div>
       </div>
     </section>

@@ -1,8 +1,4 @@
 import { CONTACT, waMessage } from "@/lib/contact";
-import FareQuote from "./FareQuote";
-
-// Without a LocationIQ token there is no quote card; the hero is the left column alone.
-const hasQuote = !!process.env.NEXT_PUBLIC_LOCATIONIQ_TOKEN;
 
 export default function Hero() {
   return (
@@ -25,70 +21,58 @@ export default function Hero() {
           dark:bg-sky-700/12"
       />
 
-      <div className="container-page pt-6 pb-14 sm:pt-12 sm:pb-20 lg:pt-8 lg:pb-24">
-        {/* Phone and tablet: intro, quote card, ticks, in DOM and tab order.
-            Desktop: intro and ticks on the left, the card on the right spanning both rows.
-            The 1fr second row takes the card's extra height, so the left side never moves. */}
-        <div
-          className={`grid gap-6 sm:gap-8 lg:gap-12 items-start ${hasQuote ? "lg:grid-cols-2 lg:grid-rows-[auto_1fr]" : "lg:grid-cols-12"}`}
-        >
-          <div className={hasQuote ? "" : "lg:col-span-7"}>
-            <span className="eyebrow">Wheelchair-accessible rides • Across Barbados</span>
-            <h1 className="h-display mt-3 sm:mt-4">
-              Call us. <span className="text-brand-700 dark:text-brand-300">We&apos;ll be there.</span>
-            </h1>
-            <p className="mt-3 sm:mt-6 text-base sm:text-xl/7 text-navy-700 leading-relaxed max-w-2xl
-              dark:text-mist-100">
-              Reliable, accessible transport for Barbadians who need a little extra care getting
-              around.
-              <span className="hidden sm:inline">
-                {" "}Appointments, errands, family time, wherever the day takes you. Schedule
-                ahead and ride easy.
-              </span>
-            </p>
+      <div className="container-page pt-6 pb-10 sm:pt-12 sm:pb-14 lg:pt-12 lg:pb-16">
+        {/* One short column: left-aligned on a phone, centred from 768px.
+            The fare card lives in the booking section. */}
+        <div className="mx-auto max-w-3xl md:text-center">
+          <span className="eyebrow">Wheelchair-accessible rides • Across Barbados</span>
+          <h1 className="h-display mt-3 sm:mt-4">
+            Call us. <span className="text-brand-700 dark:text-brand-300">We&apos;ll be there.</span>
+          </h1>
+          <p className="mt-3 sm:mt-6 text-base sm:text-xl/7 text-navy-700 leading-relaxed max-w-2xl md:mx-auto
+            dark:text-mist-100">
+            Reliable, accessible transport for Barbadians who need a little extra care getting
+            around.
+            <span className="hidden sm:inline">
+              {" "}Appointments, errands, family time, wherever the day takes you. Schedule
+              ahead and ride easy.
+            </span>
+          </p>
 
-            {/* Phone: Call only. WhatsApp and Book are in the sticky bar. */}
-            <div className="mt-5 sm:mt-8 grid grid-cols-1 md:flex md:flex-wrap gap-3">
-              <a href={`tel:${CONTACT.phoneTel}`} className="btn-primary w-full md:w-auto whitespace-nowrap">
-                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden>
-                  <path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .58 3.6 1 1 0 0 1-.25 1l-2.23 2.2Z" />
-                </svg>
-                Call {CONTACT.phoneDisplay}
-              </a>
-              <a
-                href={`https://wa.me/${CONTACT.whatsApp}?text=${waMessage}`}
-                className="btn-whatsapp hidden md:inline-flex whitespace-nowrap"
-                target="_blank"
-                rel="noopener"
-              >
-                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden>
-                  <path d="M20.5 3.5A11 11 0 0 0 3.3 17.3L2 22l4.8-1.3A11 11 0 1 0 20.5 3.5Zm-8.5 17a8.9 8.9 0 0 1-4.6-1.3l-.3-.2-2.9.8.8-2.8-.2-.3a8.9 8.9 0 1 1 7.2 3.8Zm5-6.7c-.3-.1-1.6-.8-1.8-.9-.3-.1-.4-.1-.6.1l-.8 1c-.2.2-.3.2-.6.1a7.3 7.3 0 0 1-2.1-1.3 8.3 8.3 0 0 1-1.5-1.8c-.2-.3 0-.4.1-.6l.4-.4.3-.5c.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1 2.7 11.6 11.6 0 0 0 4.5 4 5.2 5.2 0 0 0 3 .6c.6-.1 1.6-.6 1.8-1.2.2-.6.2-1.1.2-1.2 0-.1-.2-.2-.4-.2Z" />
-                </svg>
-                WhatsApp
-              </a>
-            </div>
-
-            <p className="mt-3 sm:mt-4 flex items-center gap-2 text-base font-semibold text-navy-800 dark:text-mist-100">
-              <svg viewBox="0 0 24 24" className="h-6 w-6 flex-none text-brand-700 dark:text-sky-500" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
-                <circle cx="12" cy="12" r="9" />
-                <path d="M12 7v5l3 2" />
+          {/* Phone: Call only. WhatsApp and Book are in the sticky bar. */}
+          <div className="mt-5 sm:mt-8 grid grid-cols-1 md:flex md:flex-wrap md:justify-center gap-3">
+            <a href={`tel:${CONTACT.phoneTel}`} className="btn-primary w-full md:w-auto whitespace-nowrap">
+              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden>
+                <path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .58 3.6 1 1 0 0 1-.25 1l-2.23 2.2Z" />
               </svg>
-              Open {CONTACT.businessHours}
-            </p>
+              Call {CONTACT.phoneDisplay}
+            </a>
+            <a
+              href={`https://wa.me/${CONTACT.whatsApp}?text=${waMessage}`}
+              className="btn-whatsapp hidden md:inline-flex whitespace-nowrap"
+              target="_blank"
+              rel="noopener"
+            >
+              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden>
+                <path d="M20.5 3.5A11 11 0 0 0 3.3 17.3L2 22l4.8-1.3A11 11 0 1 0 20.5 3.5Zm-8.5 17a8.9 8.9 0 0 1-4.6-1.3l-.3-.2-2.9.8.8-2.8-.2-.3a8.9 8.9 0 1 1 7.2 3.8Zm5-6.7c-.3-.1-1.6-.8-1.8-.9-.3-.1-.4-.1-.6.1l-.8 1c-.2.2-.3.2-.6.1a7.3 7.3 0 0 1-2.1-1.3 8.3 8.3 0 0 1-1.5-1.8c-.2-.3 0-.4.1-.6l.4-.4.3-.5c.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1 2.7 11.6 11.6 0 0 0 4.5 4 5.2 5.2 0 0 0 3 .6c.6-.1 1.6-.6 1.8-1.2.2-.6.2-1.1.2-1.2 0-.1-.2-.2-.4-.2Z" />
+              </svg>
+              WhatsApp
+            </a>
+            <a href="#book" className="btn-secondary hidden md:inline-flex whitespace-nowrap">
+              Book a ride
+            </a>
           </div>
 
-          {hasQuote && (
-            <div className="lg:col-start-2 lg:row-start-1 lg:row-span-2">
-              <FareQuote />
-            </div>
-          )}
+          <p className="mt-3 sm:mt-4 flex items-center md:justify-center gap-2 text-base font-semibold text-navy-800 dark:text-mist-100">
+            <svg viewBox="0 0 24 24" className="h-6 w-6 flex-none text-brand-700 dark:text-sky-500" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 7v5l3 2" />
+            </svg>
+            Open {CONTACT.businessHours}
+          </p>
 
           {/* Trust strip */}
-          <ul
-            className={`grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-3 text-sm sm:text-base ${
-              hasQuote ? "lg:col-start-1 lg:row-start-2" : "lg:col-span-7"
-            }`}
-          >
+          <ul className="mt-6 sm:mt-8 grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-3 text-left text-sm sm:text-base">
             {[
               "On time, every ride",
               "Trained, caring drivers",

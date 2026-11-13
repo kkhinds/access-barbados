@@ -19,7 +19,7 @@ const highlights = [
 
 export default function About() {
   return (
-    <section id="about" className="section">
+    <section id="about" className="section bg-mist-50 dark:bg-navy-900">
       <div className="container-page grid lg:grid-cols-2 gap-10 sm:gap-12 items-center">
         <div>
           <span className="eyebrow">Why we’re here</span>

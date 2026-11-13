@@ -367,4 +367,13 @@
   :has(> .fare-map.leaflet-container:focus-visible) {
     outline-color: #ffc20e;
   }
+  /* Dark theme: darken the light tiles in place. Only the tile pane is filtered,
+     so pins, the route and the controls keep their own colours. */
+  .fare-map .leaflet-tile-pane {
+    filter: invert(1) hue-rotate(180deg) brightness(1.2) contrast(0.85);
+  }
+  /* Brand blue is too dim on dark tiles; the light blue is 7.1:1 on navy. */
+  .fare-map .leaflet-overlay-pane path {
+    stroke: var(--color-sky-500);
+  }
 }

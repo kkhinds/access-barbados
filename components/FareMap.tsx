@@ -1,6 +1,6 @@
 "use client";
 
-// The only file that imports Leaflet. The hero's quote card (FareQuote) loads it
+// The only file that imports Leaflet. The booking section's quote card (FareQuote) loads it
 // with a dynamic import() only when the customer presses "Pick places on the map"
 // or chooses a typed suggestion, so no Leaflet code, CSS or tile request happens
 // before that.
@@ -134,7 +134,8 @@ export default function FareMap({ pickup, dropoff, route, failed, onPick, onFail
     if (!m) return;
     line.current?.remove();
     line.current = null;
-    // Brand blue: over 3:1 against the light streets tiles.
+    // Brand blue: over 3:1 against the light streets tiles. The dark theme overrides
+    // it with the light blue in globals.css, over the darkened tiles.
     if (route) line.current = L.polyline(route, { color: "#1166cc", weight: 6, opacity: 0.95, interactive: false }).addTo(m);
     const pts = fitPoints(route, failed, latest.current.pickup, latest.current.dropoff);
     if (pts) m.fitBounds(L.latLngBounds(pts), { ...ROUTE_PAD, animate: !reducedMotion() });

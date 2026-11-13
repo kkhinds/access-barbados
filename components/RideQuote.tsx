@@ -1,8 +1,8 @@
 "use client";
 
-// One piece of state for the ride: the two places and the fare. The hero's quote
-// card and the booking form are two views of it, so places picked in the hero
-// are already in the form, and an edit in the form re-prices the hero card.
+// One piece of state for the ride: the two places and the fare. The booking
+// section's quote card and its form are two views of it: the card sets the places
+// (the form does, with no map token), and the form sends them with the fare.
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { FARE_RATE, fareBbd, inBarbados, toMiles } from "@/lib/fare";
 import { reverseGeocode, routeBetween } from "@/lib/locationiq";
@@ -142,7 +142,7 @@ export function hintFor({ pickup, dropoff, quote, noPlace }: RideQuote) {
   return "Type your pickup and drop-off, or pick them on the map.";
 }
 
-/** The visible fare text, shared by the hero card and the form. Not a live region. */
+/** The visible fare text, shared by the quote card and the form. Not a live region. */
 export function FareSummary({ quote }: { quote: Quote }) {
   if (quote?.state === "working") return <p>Working out your fare…</p>;
   if (quote?.state === "failed") return <p>{FAILED}</p>;
