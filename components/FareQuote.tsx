@@ -75,7 +75,7 @@ export default function FareQuote() {
           Or pick both places on the map
         </p>
         {!mapFailed && (
-          <p id="quote-map-hint" className="mb-2 text-base text-navy-700 dark:text-mist-100/85">
+          <p id="quote-map-hint" className="mb-2 min-h-[3em] text-base text-navy-700 dark:text-mist-100/85">
             {hintFor(rq)}
           </p>
         )}
@@ -94,6 +94,7 @@ export default function FareQuote() {
               pickup={pickup}
               dropoff={dropoff}
               route={quote?.state === "ok" ? quote.line : null}
+              failed={quote?.state === "failed"}
               onPick={mapPick}
               onFail={() => setMapFailed(true)}
             />
@@ -132,19 +133,19 @@ export default function FareQuote() {
         {hasPickup && hasDropoff ? "Book this ride" : "Book a ride"}
       </a>
 
-      <div className="mt-4 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mt-4 flex flex-col-reverse gap-3">
         <p className="text-base text-navy-700 dark:text-mist-100/85">
           Prefer to talk? Call{" "}
           <a
             href={`tel:${CONTACT.phoneTel}`}
-            className="font-semibold text-brand-800 underline underline-offset-2 decoration-2 hover:decoration-gold-500
+            className="whitespace-nowrap font-semibold text-brand-800 underline underline-offset-2 decoration-2 hover:decoration-gold-500
               dark:text-brand-300 dark:hover:decoration-gold-400"
           >
             {CONTACT.phoneDisplay}
           </a>
         </p>
         {!mapFailed && (hasPickup || hasDropoff) && (
-          <button type="button" onClick={clearPins} className="btn-secondary w-full sm:w-auto">
+          <button type="button" onClick={clearPins} className="btn-secondary w-full">
             Clear map pins
           </button>
         )}

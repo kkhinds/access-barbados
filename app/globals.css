@@ -241,17 +241,18 @@
   .skip-link {
     position: absolute;
     left: 0.5rem;
-    top: -3rem;
+    top: 0.5rem;
+    transform: translateY(calc(-100% - 1rem));
     z-index: 100;
     background: #0d51a4;
     color: white;
     padding: 0.75rem 1.25rem;
     border-radius: 0.5rem;
     font-weight: 600;
-    transition: top 0.15s ease-in-out;
+    transition: transform 0.15s ease-in-out;
   }
   .skip-link:focus {
-    top: 0.5rem;
+    transform: none;
   }
   @media (prefers-color-scheme: dark) {
     .skip-link {
@@ -280,9 +281,13 @@
   font: inherit;
   background: var(--color-mist-100);
 }
-/* The frame clips overflow, so the ring sits inside the map edge. */
+/* Tiles paint over a ring on the map itself, so the frame carries it. */
 .fare-map.leaflet-container:focus-visible {
-  outline-offset: -5px;
+  outline: none;
+}
+:has(> .fare-map.leaflet-container:focus-visible) {
+  outline: 3px solid #1166cc;
+  outline-offset: 3px;
 }
 .fare-map.leaflet-container .leaflet-bar {
   border: 2px solid var(--color-navy-600);
@@ -358,5 +363,8 @@
   }
   .fare-map.leaflet-container .leaflet-control-attribution a {
     color: var(--color-sky-300);
+  }
+  :has(> .fare-map.leaflet-container:focus-visible) {
+    outline-color: #ffc20e;
   }
 }
