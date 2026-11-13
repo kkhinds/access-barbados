@@ -5,9 +5,9 @@ import Image from "next/image";
 import { CONTACT } from "@/lib/contact";
 
 const navLinks = [
+  { href: "#book", label: "Book a Ride" },
   { href: "#services", label: "Services" },
   { href: "#about", label: "About" },
-  { href: "#book", label: "Book a Ride" },
   { href: "#contact", label: "Contact" },
 ];
 

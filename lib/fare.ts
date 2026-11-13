@@ -22,3 +22,17 @@ export function fareBbd(miles: number, rate: number): number | null {
 export function inBarbados(lat: number | null, lng: number | null): boolean {
   return lat != null && lng != null && lat >= 13.02 && lat <= 13.36 && lng >= -59.68 && lng <= -59.4;
 }
+
+/** What the map should fit: the route when there is one, both pins when the
+ *  route lookup failed, otherwise null (leave the view alone). */
+export function fitPoints(
+  route: [number, number][] | null,
+  failed: boolean,
+  pickup: { lat: number | null; lng: number | null },
+  dropoff: { lat: number | null; lng: number | null },
+): [number, number][] | null {
+  if (route?.length) return route;
+  if (failed && pickup.lat != null && pickup.lng != null && dropoff.lat != null && dropoff.lng != null)
+    return [[pickup.lat, pickup.lng], [dropoff.lat, dropoff.lng]];
+  return null;
+}

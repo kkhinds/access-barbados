@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { toMiles, fareBbd, inBarbados } from "./fare.ts";
+import { toMiles, fareBbd, inBarbados, fitPoints } from "./fare.ts";
 
 test("toMiles rounds metres to a tenth of a mile", () => {
   assert.equal(toMiles(1609.344), 1);
@@ -50,4 +50,15 @@ test("inBarbados", () => {
   assert.ok(!inBarbados(-59.613, 13.0975)); // swapped
   assert.ok(!inBarbados(null, -59.613));
   assert.ok(!inBarbados(13.0975, null));
+});
+
+test("fitPoints", () => {
+  const route: [number, number][] = [[13.1, -59.6], [13.2, -59.5]];
+  const a = { lat: 13.25, lng: -59.642 };
+  const b = { lat: 13.07, lng: -59.54 };
+  assert.deepEqual(fitPoints(route, false, a, b), route);
+  assert.deepEqual(fitPoints(null, true, a, b), [[13.25, -59.642], [13.07, -59.54]]);
+  assert.equal(fitPoints(null, false, a, b), null);
+  assert.equal(fitPoints(null, true, a, { lat: null, lng: -59.54 }), null);
+  assert.deepEqual(fitPoints([], true, a, b), [[13.25, -59.642], [13.07, -59.54]]);
 });

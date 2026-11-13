@@ -33,9 +33,9 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold">Quick links</h4>
             <ul className="mt-3 sm:mt-4 -mx-2">
+              <li><a href="#book" className="block px-2 py-2 hover:text-white">Book a Ride</a></li>
               <li><a href="#services" className="block px-2 py-2 hover:text-white">Services</a></li>
               <li><a href="#about" className="block px-2 py-2 hover:text-white">About</a></li>
-              <li><a href="#book" className="block px-2 py-2 hover:text-white">Book a Ride</a></li>
               <li><a href="#contact" className="block px-2 py-2 hover:text-white">Contact</a></li>
             </ul>
           </div>

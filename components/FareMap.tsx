@@ -8,6 +8,7 @@ import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import type { LocationValue } from "./LocationAutocomplete";
+import { fitPoints } from "@/lib/fare";
 
 export type Which = "pickup" | "dropoff";
 
@@ -16,6 +17,8 @@ export type FareMapProps = {
   dropoff: LocationValue;
   /** Route as [lat, lng] pairs, or null when there is no quote. */
   route: [number, number][] | null;
+  /** The route lookup failed. */
+  failed: boolean;
   /** A tap on the map (the empty point, pickup first) or a pin's dragend. */
   onPick: (which: Which, lat: number, lng: number) => void;
   /** The tiles could not load. */
@@ -38,7 +41,7 @@ const ROUTE_PAD: L.FitBoundsOptions = { paddingTopLeft: [84, 32], paddingBottomR
 
 const reducedMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-export default function FareMap({ pickup, dropoff, route, onPick, onFail }: FareMapProps) {
+export default function FareMap({ pickup, dropoff, route, failed, onPick, onFail }: FareMapProps) {
   const el = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
   const pins = useRef<Record<Which, L.Marker | null>>({ pickup: null, dropoff: null });
@@ -131,11 +134,11 @@ export default function FareMap({ pickup, dropoff, route, onPick, onFail }: Fare
     if (!m) return;
     line.current?.remove();
     line.current = null;
-    if (!route) return;
     // Brand blue: over 3:1 against the light streets tiles.
-    line.current = L.polyline(route, { color: "#1166cc", weight: 6, opacity: 0.95, interactive: false }).addTo(m);
-    m.fitBounds(line.current.getBounds(), { ...ROUTE_PAD, animate: !reducedMotion() });
-  }, [route]);
+    if (route) line.current = L.polyline(route, { color: "#1166cc", weight: 6, opacity: 0.95, interactive: false }).addTo(m);
+    const pts = fitPoints(route, failed, latest.current.pickup, latest.current.dropoff);
+    if (pts) m.fitBounds(L.latLngBounds(pts), { ...ROUTE_PAD, animate: !reducedMotion() });
+  }, [route, failed]);
 
   return <div ref={el} className="fare-map h-full w-full" />;
 }

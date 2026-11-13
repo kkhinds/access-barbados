@@ -146,7 +146,7 @@ export default function LocationAutocomplete({
                 pick(s);
               }}
               onMouseEnter={() => setHi(i)}
-              className={`px-3 py-2 cursor-pointer text-sm ${
+              className={`px-4 py-3 cursor-pointer text-base ${
                 i === hi
                   ? "bg-brand-100 text-navy-900 dark:bg-brand-900/40 dark:text-mist-100"
                   : "text-navy-900 dark:text-mist-100"
@@ -154,7 +154,7 @@ export default function LocationAutocomplete({
             >
               <div className="font-semibold">{s.display_place ?? s.display_name}</div>
               {s.display_address && (
-                <div className="text-xs text-navy-700 dark:text-mist-100/70">
+                <div className="text-sm text-navy-700 dark:text-mist-100/85">
                   {s.display_address}
                 </div>
               )}
