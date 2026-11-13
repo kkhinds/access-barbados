@@ -15,9 +15,9 @@ export default function Page() {
       <RideQuoteProvider>
         <main id="main">
           <Hero />
+          <BookingForm />
           <Services />
           <About />
-          <BookingForm />
           <Contact />
         </main>
       </RideQuoteProvider>
