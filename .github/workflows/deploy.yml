@@ -27,6 +27,8 @@ jobs:
 
       - run: npm ci
 
+      - run: npm test
+
       - name: Sync services + contact from admin backend
         env:
           # When the admin is live, set ADMIN_SYNC_URL repository variable to

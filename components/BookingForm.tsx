@@ -3,12 +3,18 @@
 import { useState } from "react";
 import { CONTACT } from "@/lib/contact";
 import TurnstileWidget from "./TurnstileWidget";
-import LocationAutocomplete, { type LocationValue } from "./LocationAutocomplete";
+import LocationAutocomplete from "./LocationAutocomplete";
+import { FareSummary, fareLine, useRideQuote } from "./RideQuote";
 import servicesData from "@/lib/services.json";
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
+// Without a LocationIQ token the fare does not render.
+const LOCATIONIQ_TOKEN = process.env.NEXT_PUBLIC_LOCATIONIQ_TOKEN ?? "";
 
 type Status = "idle" | "submitting" | "success" | "error";
+
+/** What the success screen says about the fare. */
+type Sent = { fare: number } | "unquoted" | null;
 
 // Labels come from lib/services.json, which the CI sync script overwrites from
 // the admin's /api/public/sync endpoint before each build.
@@ -20,8 +26,24 @@ export default function BookingForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [turnstileToken, setTurnstileToken] = useState<string>("");
-  const [pickup, setPickup] = useState<LocationValue>({ name: "", lat: null, lng: null });
-  const [dropoff, setDropoff] = useState<LocationValue>({ name: "", lat: null, lng: null });
+  const [sent, setSent] = useState<Sent>(null);
+  // Places and fare are shared with the hero's quote card.
+  const { pickup, dropoff, quote, typePoint, clearPins } = useRideQuote();
+
+  function succeed(form: HTMLFormElement) {
+    setSent(
+      !LOCATIONIQ_TOKEN
+        ? null
+        : quote?.state === "ok"
+          ? { fare: quote.fare }
+          : pickup.name.trim() && dropoff.name.trim()
+            ? "unquoted"
+            : null,
+    );
+    setStatus("success");
+    form.reset();
+    clearPins();
+  }
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -90,11 +112,8 @@ export default function BookingForm() {
           throw new Error(data.error ?? "Your request didn't go through. Please try again or call us.");
         }
 
-        setStatus("success");
-        form.reset();
+        succeed(form);
         setTurnstileToken("");
-        setPickup({ name: "", lat: null, lng: null });
-        setDropoff({ name: "", lat: null, lng: null });
         return;
       } catch (err) {
         setStatus("error");
@@ -112,6 +131,7 @@ export default function BookingForm() {
       get("pickupTime") && `Pickup time: ${get("pickupTime")}`,
       pickup.name && `Pickup: ${pickup.name}`,
       dropoff.name && `Drop-off: ${dropoff.name}`,
+      quote?.state === "ok" && `Estimated fare: ${fareLine(quote)}`,
       get("serviceType") && `Service: ${get("serviceType")}`,
       get("passengers") && `Passengers: ${get("passengers")}`,
       mobility.length > 0 && `Mobility needs: ${mobility.join(", ")}`,
@@ -122,8 +142,7 @@ export default function BookingForm() {
     const body = lines.join("\n");
     const mailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-    setStatus("success");
-    form.reset();
+    succeed(form);
     window.location.href = mailto;
   }
 
@@ -154,6 +173,13 @@ export default function BookingForm() {
                 Thanks. We&apos;ll call you back to confirm the pickup. If you need the ride today,
                 give us a ring directly so we can sort it on the spot.
               </p>
+              {sent && (
+                <p className="mt-3 text-base text-navy-700 max-w-md mx-auto dark:text-mist-100/85">
+                  {sent === "unquoted"
+                    ? "We'll confirm your fare when we call."
+                    : `Estimated fare: ${fareLine(sent)}. We'll confirm the final fare when we call.`}
+                </p>
+              )}
               <div className="mt-6 grid grid-cols-1 sm:flex sm:flex-wrap sm:justify-center gap-3">
                 <a href={`tel:${CONTACT.phoneTel}`} className="btn-primary">
                   Call {CONTACT.phoneDisplay}
@@ -169,6 +195,46 @@ export default function BookingForm() {
             </div>
           ) : (
             <form onSubmit={onSubmit} className="grid gap-5 sm:grid-cols-2" noValidate>
+              <div className="sm:col-span-1">
+                <LocationAutocomplete
+                  id="pickupLocation"
+                  label={
+                    <>
+                      Pickup location <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
+                    </>
+                  }
+                  placeholder="Home address, hospital, hotel, landmark…"
+                  value={pickup}
+                  onChange={(v) => typePoint("pickup", v)}
+                />
+              </div>
+
+              <div className="sm:col-span-1">
+                <LocationAutocomplete
+                  id="dropoffLocation"
+                  label={
+                    <>
+                      Drop-off location <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
+                    </>
+                  }
+                  placeholder="Destination"
+                  value={dropoff}
+                  onChange={(v) => typePoint("dropoff", v)}
+                />
+              </div>
+
+              {LOCATIONIQ_TOKEN && (
+                <p className="sm:col-span-2 -mt-2">
+                  <a
+                    href="#quote"
+                    className="inline-flex min-h-[48px] items-center font-semibold text-brand-800 underline underline-offset-2 decoration-2
+                      hover:decoration-gold-500 dark:text-brand-300 dark:hover:decoration-gold-400"
+                  >
+                    Change these on the map
+                  </a>
+                </p>
+              )}
+
               <div className="sm:col-span-1">
                 <label htmlFor="name" className="field-label">
                   Full name <span className="text-alert-700 dark:text-alert-300" aria-hidden>*</span>
@@ -220,34 +286,6 @@ export default function BookingForm() {
                   Pickup time <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
                 </label>
                 <input id="pickupTime" name="pickupTime" type="time" className="field-input" />
-              </div>
-
-              <div className="sm:col-span-1">
-                <LocationAutocomplete
-                  id="pickupLocation"
-                  name="pickupLocation"
-                  label={
-                    <>
-                      Pickup location <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
-                    </>
-                  }
-                  placeholder="Home address, hospital, hotel, landmark…"
-                  onChange={setPickup}
-                />
-              </div>
-
-              <div className="sm:col-span-1">
-                <LocationAutocomplete
-                  id="dropoffLocation"
-                  name="dropoffLocation"
-                  label={
-                    <>
-                      Drop-off location <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
-                    </>
-                  }
-                  placeholder="Destination"
-                  onChange={setDropoff}
-                />
               </div>
 
               <div className="sm:col-span-1">
@@ -345,6 +383,16 @@ export default function BookingForm() {
                 >
                   <span className="sr-only">Error: </span>
                   {errorMsg || "Something went wrong. Please try again or call us."}
+                </div>
+              )}
+
+              {LOCATIONIQ_TOKEN && quote && quote.state !== "same" && (
+                // Not a live region: RideQuoteProvider announces the fare once for the page.
+                <div
+                  className="sm:col-span-2 rounded-xl border-2 border-brand-700/40 bg-brand-50 px-4 py-3 text-base text-navy-800
+                    dark:border-sky-500/50 dark:bg-navy-900 dark:text-mist-100"
+                >
+                  <FareSummary quote={quote} />
                 </div>
               )}
 

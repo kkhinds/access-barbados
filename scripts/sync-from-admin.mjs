@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
- * Pulls the latest services + contact info from the admin sync endpoint and
- * writes them to lib/contact.json and lib/services.json. Run during the
+ * Pulls the latest services, contact info and fare rate from the admin sync
+ * endpoint and writes them to lib/contact.json, lib/services.json and
+ * lib/fare.json. Run during the
  * GitHub Pages build *before* `next build`.
  *
  * If ADMIN_SYNC_URL isn't set (e.g. local dev before backend exists), this
@@ -52,6 +53,10 @@ try {
   if (!data?.contact || !Array.isArray(data?.services)) {
     throw new Error("malformed sync response (missing contact or services)");
   }
+  const perMileBbd = data.fare?.perMileBbd;
+  if (typeof perMileBbd !== "number" || !(perMileBbd > 0)) {
+    throw new Error("malformed sync response (fare.perMileBbd missing or not above 0)");
+  }
 
   await mkdir(libDir, { recursive: true });
   await writeFile(
@@ -65,8 +70,10 @@ try {
     "utf8",
   );
 
+  await writeFile(join(libDir, "fare.json"), JSON.stringify({ perMileBbd }) + "\n", "utf8");
+
   console.log(
-    `[sync] Wrote lib/contact.json + lib/services.json (${data.services.length} services).`,
+    `[sync] Wrote lib/contact.json, lib/services.json (${data.services.length} services), lib/fare.json ($${perMileBbd}/mile).`,
   );
 } catch (err) {
   console.error("[sync] Failed:", err instanceof Error ? err.message : err);

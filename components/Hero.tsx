@@ -1,11 +1,14 @@
 import { CONTACT, waMessage } from "@/lib/contact";
+import FareQuote from "./FareQuote";
+
+// Without a LocationIQ token there is no quote card; the hero is the left column alone.
+const hasQuote = !!process.env.NEXT_PUBLIC_LOCATIONIQ_TOKEN;
 
 export default function Hero() {
   return (
     <section id="top" className="relative overflow-hidden">
       {/* Blue tint into white, matching the brand applications. Gold is the sun in
-          the mark, so on this page it only carries the pre-launch bar and the
-          panel behind the hours card. */}
+          the mark, so on this page it only carries the pre-launch bar. */}
       <div
         aria-hidden
         className="absolute inset-0 -z-10 bg-linear-to-br from-brand-100 via-brand-50 to-page
@@ -22,37 +25,39 @@ export default function Hero() {
           dark:bg-sky-700/12"
       />
 
-      <div className="container-page pt-10 pb-16 sm:pt-16 sm:pb-24 lg:pt-24 lg:pb-32">
-        <div className="grid lg:grid-cols-12 gap-10 sm:gap-12 items-center">
-          <div className="lg:col-span-7">
+      <div className="container-page pt-6 pb-14 sm:pt-12 sm:pb-20 lg:pt-8 lg:pb-24">
+        {/* Phone and tablet: intro, quote card, ticks, in DOM and tab order.
+            Desktop: intro and ticks on the left, the card on the right spanning both rows.
+            The 1fr second row takes the card's extra height, so the left side never moves. */}
+        <div
+          className={`grid gap-6 sm:gap-8 lg:gap-12 items-start ${hasQuote ? "lg:grid-cols-2 lg:grid-rows-[auto_1fr]" : "lg:grid-cols-12"}`}
+        >
+          <div className={hasQuote ? "" : "lg:col-span-7"}>
             <span className="eyebrow">Wheelchair-accessible rides • Across Barbados</span>
             <h1 className="h-display mt-3 sm:mt-4">
               Call us. <span className="text-brand-700 dark:text-brand-300">We&apos;ll be there.</span>
             </h1>
-            <p className="mt-5 sm:mt-6 text-base sm:text-xl/7 text-navy-700 leading-relaxed max-w-2xl
+            <p className="mt-3 sm:mt-6 text-base sm:text-xl/7 text-navy-700 leading-relaxed max-w-2xl
               dark:text-mist-100">
               Reliable, accessible transport for Barbadians who need a little extra care getting
-              around. Appointments, errands, family time, wherever the day takes you. Schedule
-              ahead and ride easy.
+              around.
+              <span className="hidden sm:inline">
+                {" "}Appointments, errands, family time, wherever the day takes you. Schedule
+                ahead and ride easy.
+              </span>
             </p>
 
-            <div className="mt-7 sm:mt-8 grid grid-cols-1 sm:flex sm:flex-wrap gap-3">
-              <a href="#book" className="btn-primary w-full sm:w-auto">
-                Book a Ride
-                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 5l7 7-7 7" />
-                </svg>
-              </a>
-              <a href={`tel:${CONTACT.phoneTel}`} className="btn-secondary w-full sm:w-auto whitespace-nowrap">
+            {/* Phone: Call only. WhatsApp and Book are in the sticky bar. */}
+            <div className="mt-5 sm:mt-8 grid grid-cols-1 md:flex md:flex-wrap gap-3">
+              <a href={`tel:${CONTACT.phoneTel}`} className="btn-primary w-full md:w-auto whitespace-nowrap">
                 <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden>
                   <path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .58 3.6 1 1 0 0 1-.25 1l-2.23 2.2Z" />
                 </svg>
-                <span className="sm:hidden">Call us</span>
-                <span className="hidden sm:inline">Call {CONTACT.phoneDisplay}</span>
+                Call {CONTACT.phoneDisplay}
               </a>
               <a
                 href={`https://wa.me/${CONTACT.whatsApp}?text=${waMessage}`}
-                className="btn-whatsapp w-full sm:w-auto whitespace-nowrap"
+                className="btn-whatsapp hidden md:inline-flex whitespace-nowrap"
                 target="_blank"
                 rel="noopener"
               >
@@ -63,55 +68,43 @@ export default function Hero() {
               </a>
             </div>
 
-            {/* Trust strip */}
-            <ul className="mt-8 sm:mt-10 grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-3 text-sm sm:text-base">
-              {[
-                "On time, every ride",
-                "Trained, caring drivers",
-                "Wheelchair-ready vehicles",
-                "Door-to-door service",
-                "Schedule in advance",
-                "Anywhere on the island",
-              ].map((item) => (
-                <li key={item} className="flex items-start gap-2 text-navy-800 dark:text-mist-100">
-                  <svg viewBox="0 0 24 24" className="h-5 w-5 mt-0.5 text-brand-600 flex-none dark:text-brand-300" fill="currentColor" aria-hidden>
-                    <path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2Z" />
-                  </svg>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+            <p className="mt-3 sm:mt-4 flex items-center gap-2 text-base font-semibold text-navy-800 dark:text-mist-100">
+              <svg viewBox="0 0 24 24" className="h-6 w-6 flex-none text-brand-700 dark:text-sky-500" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 2" />
+              </svg>
+              Open {CONTACT.businessHours}
+            </p>
           </div>
 
-          {/* Hours panel — visible md+. Sticky bottom bar covers Call/Book on phones. */}
-          <div className="hidden md:block lg:col-span-5">
-            <div className="relative max-w-md mx-auto lg:max-w-none">
-              <div className="card shadow-soft">
-                <div className="flex items-start gap-4">
-                  <span
-                    aria-hidden
-                    className="inline-flex h-12 w-12 flex-none items-center justify-center rounded-full bg-brand-100 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300"
-                  >
-                    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="currentColor">
-                      <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm.5 5h-1v6l5.2 3.2.5-.86L12.5 12.5V7Z" />
-                    </svg>
-                  </span>
-                  <div>
-                    <div className="text-xs uppercase tracking-wider text-brand-800 font-semibold dark:text-brand-300">
-                      We&apos;re open
-                    </div>
-                    <div className="mt-1 text-lg font-semibold text-navy-900 leading-tight dark:text-mist-100">
-                      {CONTACT.businessHours}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                aria-hidden
-                className="absolute -bottom-4 -right-4 -z-10 h-full w-full rounded-xl2 bg-gold-200/70 dark:bg-gold-500/15"
-              />
+          {hasQuote && (
+            <div className="lg:col-start-2 lg:row-start-1 lg:row-span-2">
+              <FareQuote />
             </div>
-          </div>
+          )}
+
+          {/* Trust strip */}
+          <ul
+            className={`grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-3 text-sm sm:text-base ${
+              hasQuote ? "lg:col-start-1 lg:row-start-2" : "lg:col-span-7"
+            }`}
+          >
+            {[
+              "On time, every ride",
+              "Trained, caring drivers",
+              "Wheelchair-ready vehicles",
+              "Door-to-door service",
+              "Schedule in advance",
+              "Anywhere on the island",
+            ].map((item) => (
+              <li key={item} className="flex items-start gap-2 text-navy-800 dark:text-mist-100">
+                <svg viewBox="0 0 24 24" className="h-5 w-5 mt-0.5 text-brand-600 flex-none dark:text-brand-300" fill="currentColor" aria-hidden>
+                  <path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2Z" />
+                </svg>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>
