@@ -1,5 +1,7 @@
 # Hero map and per-mile rate: addendum spec
 
+> **Update, 2026-11-13 (Kemar):** customers see the fare only. The distance and the per-mile rate are never shown on the site; where this spec shows "4.6 miles by road, at $10 a mile", read "We'll confirm the final fare when we call." The admin still shows miles.
+
 Date: 2026-11-13
 Status: draft, awaiting Kemar's approval
 Repos: `access-barbados` (site), `access-barbados-admin` (admin)
