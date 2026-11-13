@@ -5,7 +5,7 @@ export default function Footer() {
   const year = new Date().getFullYear();
   return (
     <footer className="on-dark bg-navy-900 text-navy-300">
-      <div className="container-page py-12 sm:py-14">
+      <div className="container-page py-8 sm:py-14">
         <div className="grid gap-8 sm:gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2">
@@ -30,7 +30,8 @@ export default function Footer() {
             </p>
           </div>
 
-          <div>
+          {/* Phone: the header menu and the bottom bar cover these. */}
+          <div className="hidden sm:block">
             <h4 className="text-white font-semibold">Quick links</h4>
             <ul className="mt-3 sm:mt-4 -mx-2">
               <li><a href="#book" className="block px-2 py-2 hover:text-white">Book a Ride</a></li>

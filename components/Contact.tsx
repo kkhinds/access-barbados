@@ -163,7 +163,7 @@ export default function Contact() {
                 <div className="font-semibold text-navy-900 dark:text-mist-100">Email</div>
                 <div className="text-navy-700 break-all dark:text-mist-100/85">{CONTACT.email}</div>
                 <div className="text-sm text-navy-700 mt-1 dark:text-mist-100/70">
-                  Or use the form below. Your choice.
+                  Or use the message form. Your choice.
                 </div>
               </div>
             </a>
@@ -173,7 +173,15 @@ export default function Contact() {
         <div className="card shadow-soft">
           <h3 className="text-xl font-bold text-navy-900 dark:text-mist-100">Send a message</h3>
           <p className="mt-2 text-navy-700 dark:text-mist-100/85">
-            Got a question or want to book in advance? Drop us a line and we&apos;ll get back to you.
+            Got a question? Drop us a line and we&apos;ll get back to you. To book a ride, use the{" "}
+            <a
+              href="#book"
+              className="font-semibold text-brand-800 underline underline-offset-2 decoration-2 hover:decoration-gold-500
+                dark:text-brand-300 dark:hover:decoration-gold-400"
+            >
+              booking form
+            </a>
+            .
           </p>
 
           {status === "success" ? (

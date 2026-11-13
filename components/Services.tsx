@@ -99,7 +99,7 @@ const services: Service[] = [
 
 export default function Services() {
   return (
-    <section id="services" className="section bg-page dark:bg-navy-900">
+    <section id="services" className="section bg-page border-t border-mist-300 dark:bg-navy-900 dark:border-transparent">
       <div className="container-page">
         <div className="max-w-2xl">
           <span className="eyebrow">What we do</span>
@@ -111,14 +111,14 @@ export default function Services() {
 
         {/* Three columns, not four: nine services divide evenly and the copy gets
             a readable measure instead of ~24 characters a line. */}
-        <div className="mt-10 sm:mt-12 grid gap-4 sm:gap-5 sm:grid-cols-2 md:grid-cols-3">
+        <div className="mt-10 sm:mt-12 grid gap-3 sm:gap-5 sm:grid-cols-2 md:grid-cols-3">
           {services.map((s) => (
-            <article key={s.title} className="card hover:-translate-y-1 hover:shadow-soft transition">
-              <div className="inline-flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-brand-100 text-brand-700
+            <article key={s.title} className="card hover:-translate-y-1 hover:shadow-soft transition max-sm:grid max-sm:grid-cols-[auto_1fr] max-sm:gap-x-3 max-sm:p-4">
+              <div className="max-sm:row-span-2 max-sm:self-start inline-flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-brand-100 text-brand-700
                 dark:bg-brand-900/40 dark:text-brand-300">
                 <span className="block h-5 w-5 sm:h-6 sm:w-6">{s.icon}</span>
               </div>
-              <h3 className="mt-3 sm:mt-4 text-base sm:text-lg font-semibold text-navy-900 dark:text-mist-100">{s.title}</h3>
+              <h3 className="sm:mt-4 text-base sm:text-lg font-semibold text-navy-900 dark:text-mist-100">{s.title}</h3>
               <p className="mt-1.5 sm:mt-2 text-sm sm:text-base/6 text-navy-700 leading-relaxed dark:text-mist-100/85">{s.description}</p>
             </article>
           ))}
