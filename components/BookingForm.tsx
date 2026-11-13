@@ -14,7 +14,7 @@ const LOCATIONIQ_TOKEN = process.env.NEXT_PUBLIC_LOCATIONIQ_TOKEN ?? "";
 type Status = "idle" | "submitting" | "success" | "error";
 
 /** What the success screen says about the fare. */
-type Sent = { miles: number; fare: number } | "unquoted" | null;
+type Sent = { fare: number } | "unquoted" | null;
 
 // Labels come from lib/services.json, which the CI sync script overwrites from
 // the admin's /api/public/sync endpoint before each build.
@@ -35,7 +35,7 @@ export default function BookingForm() {
       !LOCATIONIQ_TOKEN
         ? null
         : quote?.state === "ok"
-          ? { miles: quote.miles, fare: quote.fare }
+          ? { fare: quote.fare }
           : pickup.name.trim() && dropoff.name.trim()
             ? "unquoted"
             : null,

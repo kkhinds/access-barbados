@@ -4,7 +4,7 @@
 // card and the booking form are two views of it, so places picked in the hero
 // are already in the form, and an edit in the form re-prices the hero card.
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
-import { FARE_RATE, fareBbd, inBarbados, rateText, toMiles } from "@/lib/fare";
+import { FARE_RATE, fareBbd, inBarbados, toMiles } from "@/lib/fare";
 import { reverseGeocode, routeBetween } from "@/lib/locationiq";
 import type { LocationValue } from "./LocationAutocomplete";
 import type { Which } from "./FareMap";
@@ -21,8 +21,8 @@ type Quote =
 
 const EMPTY: LocationValue = { name: "", lat: null, lng: null };
 
-/** "$46 BBD (4.6 miles)", for the success screen and the mailto line. */
-export const fareLine = (q: { miles: number; fare: number }) => `$${q.fare} BBD (${q.miles.toFixed(1)} miles)`;
+/** "$46 BBD", for the success screen and the mailto line. Distance and rate stay off customer screens. */
+export const fareLine = (q: { fare: number }) => `$${q.fare} BBD`;
 
 const FAILED = "We couldn't work out a fare just now. Send your request and we'll confirm your fare when we call.";
 const NO_PLACE = "We couldn't find a place there. Try a spot on a road or a building.";
@@ -117,7 +117,7 @@ export function RideQuoteProvider({ children }: { children: ReactNode }) {
         : quote?.state === "failed"
           ? FAILED
           : quote?.state === "ok"
-            ? `Estimated fare: $${quote.fare} BBD. ${quote.miles.toFixed(1)} miles by road.`
+            ? `Estimated fare: $${quote.fare} BBD.`
             : "";
 
   return (
@@ -151,8 +151,7 @@ export function FareSummary({ quote }: { quote: Quote }) {
     <>
       <p className="text-xl sm:text-2xl font-bold text-navy-900 dark:text-mist-100">Estimated fare: ${quote.fare} BBD</p>
       <p className="mt-1">
-        {quote.miles.toFixed(1)} miles by road, at {rateText(FARE_RATE)} a mile. We&apos;ll confirm the final fare when we
-        call.
+        We&apos;ll confirm the final fare when we call.
       </p>
     </>
   );

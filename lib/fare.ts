@@ -18,9 +18,6 @@ export function fareBbd(miles: number, rate: number): number | null {
   return Math.ceil((Math.round(miles * 10) * Math.round(rate * 100)) / 1000);
 }
 
-/** The rate as the customer reads it: $10, or $9.50. */
-export const rateText = (rate: number) => `$${Number.isInteger(rate) ? rate : rate.toFixed(2)}`;
-
 /** The island, with a little sea. Same box the admin checks before it quotes. */
 export function inBarbados(lat: number | null, lng: number | null): boolean {
   return lat != null && lng != null && lat >= 13.02 && lat <= 13.36 && lng >= -59.68 && lng <= -59.4;

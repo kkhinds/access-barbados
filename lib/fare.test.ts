@@ -1,11 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { toMiles, fareBbd, inBarbados, rateText } from "./fare.ts";
-
-test("rateText prints a whole-dollar rate bare and cents with two decimals", () => {
-  assert.equal(rateText(10), "$10");
-  assert.equal(rateText(9.5), "$9.50");
-});
+import { toMiles, fareBbd, inBarbados } from "./fare.ts";
 
 test("toMiles rounds metres to a tenth of a mile", () => {
   assert.equal(toMiles(1609.344), 1);
