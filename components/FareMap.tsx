@@ -30,6 +30,12 @@ const PINS = [
   ["dropoff", "B", "Drop-off pin"],
 ] as const;
 
+// Keep the island and pins clear of the zoom buttons (60×108px with margin, top
+// left) and the attribution (up to 36px tall on a phone, bottom). A route adds
+// half a pin (24px) so the whole pin shows.
+const VIEW_PAD: L.FitBoundsOptions = { paddingTopLeft: [60, 8], paddingBottomRight: [8, 36] };
+const ROUTE_PAD: L.FitBoundsOptions = { paddingTopLeft: [84, 32], paddingBottomRight: [32, 60] };
+
 const reducedMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 export default function FareMap({ pickup, dropoff, route, onPick, onFail }: FareMapProps) {
@@ -56,7 +62,7 @@ export default function FareMap({ pickup, dropoff, route, onPick, onFail }: Fare
       fadeAnimation: !still,
       markerZoomAnimation: !still,
     });
-    m.fitBounds(ISLAND, { animate: false });
+    m.fitBounds(ISLAND, { ...VIEW_PAD, animate: false });
 
     let anyTile = false;
     L.tileLayer(`https://{s}-tiles.locationiq.com/v3/streets/r/{z}/{x}/{y}.png?key=${TOKEN}`, {
@@ -128,7 +134,7 @@ export default function FareMap({ pickup, dropoff, route, onPick, onFail }: Fare
     if (!route) return;
     // Brand blue: over 3:1 against the light streets tiles.
     line.current = L.polyline(route, { color: "#1166cc", weight: 6, opacity: 0.95, interactive: false }).addTo(m);
-    m.fitBounds(line.current.getBounds(), { padding: [48, 48], animate: !reducedMotion() });
+    m.fitBounds(line.current.getBounds(), { ...ROUTE_PAD, animate: !reducedMotion() });
   }, [route]);
 
   return <div ref={el} className="fare-map h-full w-full" />;

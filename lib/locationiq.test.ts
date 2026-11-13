@@ -50,16 +50,55 @@ test("routeBetween returns metres and a lat,lng line from the GeoJSON geometry",
   );
 });
 
+const a = { lat: 13.09, lng: -59.61 }, b = { lat: 13.07, lng: -59.5 };
+const ROUTE = { code: "Ok", routes: [{ distance: 7449.3, geometry: { type: "LineString", coordinates: [[-59.61, 13.09]] } }] };
+
 test("routeBetween returns null on non-200, a rejected fetch, no routes and bad JSON", async () => {
-  const a = { lat: 13.09, lng: -59.61 }, b = { lat: 13.07, lng: -59.5 };
   for (const status of [401, 429, 500]) {
     respond({ error: "x" }, status);
-    assert.equal(await routeBetween(a, b, signal), null);
+    assert.equal(await routeBetween(a, b, signal, 0), null);
   }
   globalThis.fetch = (async () => { throw new TypeError("network down"); }) as typeof fetch;
-  assert.equal(await routeBetween(a, b, signal), null);
+  assert.equal(await routeBetween(a, b, signal, 0), null);
   respond({ code: "NoRoute", routes: [] });
-  assert.equal(await routeBetween(a, b, signal), null);
+  assert.equal(await routeBetween(a, b, signal, 0), null);
   respond("not json");
-  assert.equal(await routeBetween(a, b, signal), null);
+  assert.equal(await routeBetween(a, b, signal, 0), null);
+});
+
+// Replies in turn: a status code, "down" for a rejected fetch, or a JSON body.
+const sequence = (...replies: unknown[]) => {
+  globalThis.fetch = (async (url: string) => {
+    calls.push(String(url));
+    const r = replies.shift();
+    if (r === "down") throw new TypeError("network down");
+    return typeof r === "number" ? new Response("{}", { status: r }) : new Response(JSON.stringify(r));
+  }) as typeof fetch;
+};
+
+test("routeBetween retries once after a 429 or a network failure", async () => {
+  sequence(429, ROUTE);
+  assert.deepEqual(await routeBetween(a, b, signal, 0), { metres: 7449.3, line: [[13.09, -59.61]] });
+  assert.equal(calls.length, 2);
+  calls = [];
+  sequence("down", ROUTE);
+  assert.equal((await routeBetween(a, b, signal, 0))?.metres, 7449.3);
+  assert.equal(calls.length, 2);
+});
+
+test("routeBetween falls back after two failures, and does not retry other errors", async () => {
+  sequence(429, "down", ROUTE);
+  assert.equal(await routeBetween(a, b, signal, 0), null);
+  assert.equal(calls.length, 2);
+  calls = [];
+  sequence(500, ROUTE);
+  assert.equal(await routeBetween(a, b, signal, 0), null);
+  assert.equal(calls.length, 1);
+});
+
+test("routeBetween waits about a second before the retry by default", async () => {
+  sequence(429, ROUTE);
+  const t = Date.now();
+  assert.ok(await routeBetween(a, b, signal));
+  assert.ok(Date.now() - t >= 950);
 });

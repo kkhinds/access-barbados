@@ -81,7 +81,8 @@ export default function FareQuote() {
         )}
         <div
           ref={box}
-          className="h-[280px] overflow-hidden rounded-xl border-2 border-navy-600/40 bg-mist-100
+          // isolate: Leaflet's panes use z-index 400+; keep them under the header, the action bar and the suggestion lists.
+          className="isolate h-[280px] overflow-hidden rounded-xl border-2 border-navy-600/40 bg-mist-100
             dark:border-navy-700 dark:bg-navy-900"
         >
           {mapFailed ? (
@@ -118,9 +119,13 @@ export default function FareQuote() {
         </div>
       </div>
 
-      <div className="mt-4 min-h-[4.5rem] rounded-xl border-2 border-brand-700/40 bg-brand-50 px-4 py-3 text-base text-navy-800
-        dark:border-sky-500/50 dark:bg-navy-900 dark:text-mist-100">
-        <FareSummary quote={quote} />
+      {/* The two tallest states sit invisibly in the same grid cell, so the box keeps
+          their height at every width and the button below never moves. */}
+      <div className="mt-4 grid rounded-xl border-2 border-brand-700/40 bg-brand-50 px-4 py-3 text-base text-navy-800
+        dark:border-sky-500/50 dark:bg-navy-900 dark:text-mist-100 *:[grid-area:1/1]">
+        <div className="invisible"><FareSummary quote={{ state: "failed" }} /></div>
+        <div className="invisible"><FareSummary quote={{ state: "ok", miles: 0, fare: 999, line: [] }} /></div>
+        <div><FareSummary quote={quote} /></div>
       </div>
 
       <a href="#book" onClick={toForm} className="btn-primary mt-4 w-full">
