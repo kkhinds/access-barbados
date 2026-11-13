@@ -6,18 +6,21 @@ import BookingForm from "@/components/BookingForm";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import MobileActionBar from "@/components/MobileActionBar";
+import { RideQuoteProvider } from "@/components/RideQuote";
 
 export default function Page() {
   return (
     <>
       <Header />
-      <main id="main">
-        <Hero />
-        <Services />
-        <About />
-        <BookingForm />
-        <Contact />
-      </main>
+      <RideQuoteProvider>
+        <main id="main">
+          <Hero />
+          <Services />
+          <About />
+          <BookingForm />
+          <Contact />
+        </main>
+      </RideQuoteProvider>
       <Footer />
       <MobileActionBar />
     </>

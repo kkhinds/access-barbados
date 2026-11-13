@@ -25,27 +25,19 @@ type Suggestion = {
  *
  * Controlled: the parent owns the { name, lat, lng } value, so the fare map
  * can fill the field too. Typing clears lat/lng until a suggestion is chosen.
- * Hidden inputs are emitted for plain <form> submission too, named
- * `${name}Lat` and `${name}Lng`.
  */
 export default function LocationAutocomplete({
   id,
-  name,
   label,
   placeholder,
   value,
-  required,
   onChange,
-  className = "",
 }: {
   id: string;
-  name: string;
   label: React.ReactNode;
   placeholder?: string;
   value: LocationValue;
-  required?: boolean;
   onChange: (v: LocationValue) => void;
-  className?: string;
 }) {
   const token = process.env.NEXT_PUBLIC_LOCATIONIQ_TOKEN ?? "";
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
@@ -117,14 +109,12 @@ export default function LocationAutocomplete({
   }
 
   return (
-    <div ref={containerRef} className={`relative ${className}`}>
+    <div ref={containerRef} className="relative">
       <label htmlFor={id} className="field-label">
         {label}
       </label>
       <input
         id={id}
-        name={name}
-        required={required}
         value={value.name}
         onChange={(e) => handleInput(e.target.value)}
         onFocus={() => value.name.length >= 2 && suggestions.length > 0 && setOpen(true)}
@@ -172,9 +162,6 @@ export default function LocationAutocomplete({
           ))}
         </ul>
       )}
-
-      <input type="hidden" name={`${name}Lat`} value={value.lat ?? ""} readOnly />
-      <input type="hidden" name={`${name}Lng`} value={value.lng ?? ""} readOnly />
     </div>
   );
 }

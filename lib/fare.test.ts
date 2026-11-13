@@ -1,20 +1,40 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { toKm, fareBbd, inBarbados } from "./fare.ts";
+import { toMiles, fareBbd, inBarbados, rateText } from "./fare.ts";
 
-test("toKm rounds metres to one decimal", () => {
-  assert.equal(toKm(7449), 7.4);
-  assert.equal(toKm(7450), 7.5);
-  assert.equal(toKm(0), 0);
+test("rateText prints a whole-dollar rate bare and cents with two decimals", () => {
+  assert.equal(rateText(10), "$10");
+  assert.equal(rateText(9.5), "$9.50");
 });
 
-test("fareBbd rounds up to the next whole dollar with integer maths", () => {
-  assert.equal(fareBbd(16.6, 15), 249); // float would give 249.00000000000003 -> 250
-  assert.equal(fareBbd(7.4, 5), 37);
-  assert.equal(fareBbd(7.5, 5), 38);
-  assert.equal(fareBbd(0.1, 5), 1);
-  assert.equal(fareBbd(10, 5), 50);
-  assert.equal(fareBbd(7.4, 4.75), 36);
+test("toMiles rounds metres to a tenth of a mile", () => {
+  assert.equal(toMiles(1609.344), 1);
+  assert.equal(toMiles(7449), 4.6);
+  assert.equal(toMiles(7500), 4.7);
+  assert.equal(toMiles(16093.44), 10);
+});
+
+test("toMiles gives 0 under about 80 metres", () => {
+  assert.equal(toMiles(0), 0);
+  assert.equal(toMiles(80), 0);
+  assert.equal(toMiles(81), 0.1);
+});
+
+test("a 10.0-mile trip at $10 is exactly $100", () => {
+  assert.equal(fareBbd(toMiles(16093.44), 10), 100);
+  assert.equal(fareBbd(10, 10), 100);
+});
+
+test("fareBbd rounds up to the next whole dollar", () => {
+  assert.equal(fareBbd(4.6, 10), 46);
+  assert.equal(fareBbd(0.1, 10), 1);
+  assert.equal(fareBbd(4.6, 9.5), 44); // 43.7
+  assert.equal(fareBbd(4.7, 9.5), 45); // 44.65
+});
+
+test("fareBbd does not overcharge from floating-point error", () => {
+  assert.equal(fareBbd(4.4, 12.5), 55); // float: 55.00000000000001 -> 56
+  assert.equal(fareBbd(16.6, 15), 249); // float: 249.00000000000003 -> 250
 });
 
 test("fareBbd gives no fare for zero distance or a bad rate", () => {

@@ -28,8 +28,9 @@ const base = { services: [], contact: { email: "a@b.c" } };
 
 for (const [label, fare] of [
   ["without fare", undefined],
-  ["with perKmBbd 0", { perKmBbd: 0 }],
-  ["with perKmBbd null", { perKmBbd: null }],
+  ["with perMileBbd 0", { perMileBbd: 0 }],
+  ["with perMileBbd null", { perMileBbd: null }],
+  ["with only the old perKmBbd", { perKmBbd: 5.98 }],
 ]) {
   test(`strict sync fails on a response ${label}`, () => {
     const r = runStrict({ ...base, fare });
@@ -39,7 +40,7 @@ for (const [label, fare] of [
 }
 
 test("sync writes lib/fare.json from the fare field", () => {
-  const r = runStrict({ ...base, fare: { perKmBbd: 4.75 } });
+  const r = runStrict({ ...base, fare: { perMileBbd: 9.5 } });
   assert.equal(r.status, 0, r.stderr);
-  assert.deepEqual(JSON.parse(readFileSync(join(r.lib, "fare.json"), "utf8")), { perKmBbd: 4.75 });
+  assert.deepEqual(JSON.parse(readFileSync(join(r.lib, "fare.json"), "utf8")), { perMileBbd: 9.5 });
 });

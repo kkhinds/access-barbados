@@ -1,33 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useState, type ComponentType } from "react";
+import { useState } from "react";
 import { CONTACT } from "@/lib/contact";
-import { FARE_RATE, fareBbd, inBarbados, toKm } from "@/lib/fare";
-import { reverseGeocode, routeBetween } from "@/lib/locationiq";
 import TurnstileWidget from "./TurnstileWidget";
-import LocationAutocomplete, { type LocationValue } from "./LocationAutocomplete";
-import type { FareMapProps, Which } from "./FareMap";
+import LocationAutocomplete from "./LocationAutocomplete";
+import { FareSummary, fareLine, useRideQuote } from "./RideQuote";
 import servicesData from "@/lib/services.json";
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
-// Without a LocationIQ token the map and the fare do not render.
+// Without a LocationIQ token the fare does not render.
 const LOCATIONIQ_TOKEN = process.env.NEXT_PUBLIC_LOCATIONIQ_TOKEN ?? "";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-const EMPTY: LocationValue = { name: "", lat: null, lng: null };
-
-type Quote =
-  | null
-  | { state: "working" }
-  | { state: "failed" }
-  | { state: "same" }
-  | { state: "ok"; km: number; fare: number; line: [number, number][] };
-
 /** What the success screen says about the fare. */
-type Sent = { km: number; fare: number } | "unquoted" | null;
-
-const fareLine = (q: { km: number; fare: number }) => `$${q.fare} BBD (${q.km.toFixed(1)} km)`;
+type Sent = { miles: number; fare: number } | "unquoted" | null;
 
 // Labels come from lib/services.json, which the CI sync script overwrites from
 // the admin's /api/public/sync endpoint before each build.
@@ -39,95 +26,16 @@ export default function BookingForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [turnstileToken, setTurnstileToken] = useState<string>("");
-  const [pickup, setPickup] = useState<LocationValue>(EMPTY);
-  const [dropoff, setDropoff] = useState<LocationValue>(EMPTY);
-  const [quote, setQuote] = useState<Quote>(null);
-  const [noPlace, setNoPlace] = useState(false);
   const [sent, setSent] = useState<Sent>(null);
-  const [FareMap, setFareMap] = useState<ComponentType<FareMapProps> | null>(null);
-  const [mapFailed, setMapFailed] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
-  const lookups = useRef<Partial<Record<Which, AbortController>>>({});
-
-  // Load the map (Leaflet, its CSS, then tiles) only when the booking section is near.
-  useEffect(() => {
-    if (!LOCATIONIQ_TOKEN || !sectionRef.current) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (!entries.some((e) => e.isIntersecting)) return;
-        io.disconnect();
-        import("./FareMap").then(
-          (m) => setFareMap(() => m.default),
-          () => setMapFailed(true),
-        );
-      },
-      { rootMargin: "600px" },
-    );
-    io.observe(sectionRef.current);
-    return () => io.disconnect();
-  }, []);
-
-  // Quote whenever both points have coordinates, from the map or the fields.
-  useEffect(() => {
-    if (!LOCATIONIQ_TOKEN) return;
-    if (pickup.lat == null || pickup.lng == null || dropoff.lat == null || dropoff.lng == null) {
-      setQuote(null);
-      return;
-    }
-    const ctrl = new AbortController();
-    setQuote({ state: "working" });
-    routeBetween({ lat: pickup.lat, lng: pickup.lng }, { lat: dropoff.lat, lng: dropoff.lng }, ctrl.signal).then(
-      (r) => {
-        if (ctrl.signal.aborted) return;
-        if (!r) return setQuote({ state: "failed" });
-        const km = toKm(r.metres);
-        if (km === 0) return setQuote({ state: "same" });
-        const fare = fareBbd(km, FARE_RATE);
-        setQuote(fare == null ? { state: "failed" } : { state: "ok", km, fare, line: r.line });
-      },
-    );
-    return () => ctrl.abort();
-  }, [pickup.lat, pickup.lng, dropoff.lat, dropoff.lng]);
-
-  const setPoint = (which: Which, v: LocationValue) => (which === "pickup" ? setPickup : setDropoff)(v);
-
-  function typePoint(which: Which, v: LocationValue) {
-    lookups.current[which]?.abort();
-    setNoPlace(false);
-    setPoint(which, v);
-  }
-
-  // A map tap or a pin's dragend. A newer lookup for the same pin aborts the older one.
-  async function mapPick(which: Which, lat: number, lng: number) {
-    lookups.current[which]?.abort();
-    const ctrl = new AbortController();
-    lookups.current[which] = ctrl;
-    const name = inBarbados(lat, lng) ? await reverseGeocode(lat, lng, ctrl.signal) : null;
-    if (ctrl.signal.aborted) return;
-    if (name) {
-      setNoPlace(false);
-      setPoint(which, { name, lat, lng });
-    } else {
-      setNoPlace(true);
-      // A fresh object puts a dragged pin back where it was.
-      (which === "pickup" ? setPickup : setDropoff)((p) => ({ ...p }));
-    }
-  }
-
-  function clearPins() {
-    lookups.current.pickup?.abort();
-    lookups.current.dropoff?.abort();
-    setNoPlace(false);
-    setPickup(EMPTY);
-    setDropoff(EMPTY);
-  }
+  // Places and fare are shared with the hero's quote card.
+  const { pickup, dropoff, quote, typePoint, clearPins } = useRideQuote();
 
   function succeed(form: HTMLFormElement) {
     setSent(
       !LOCATIONIQ_TOKEN
         ? null
         : quote?.state === "ok"
-          ? { km: quote.km, fare: quote.fare }
+          ? { miles: quote.miles, fare: quote.fare }
           : pickup.name.trim() && dropoff.name.trim()
             ? "unquoted"
             : null,
@@ -136,22 +44,6 @@ export default function BookingForm() {
     form.reset();
     clearPins();
   }
-
-  const hasPickup = pickup.lat != null;
-  const hasDropoff = dropoff.lat != null;
-  const hint = noPlace
-    ? "We couldn't find a place there. Try a spot on a road or a building."
-    : quote?.state === "same"
-      ? "Pickup and drop-off are the same place. Move one pin to get a fare."
-      : hasPickup && hasDropoff
-        ? "Drag a pin to change it."
-        : hasPickup
-          ? "Now tap your drop-off."
-          : hasDropoff
-            ? "Now tap your pickup."
-            : "Tap the map to set your pickup, or type an address above.";
-  // States 7 and 8 are announced; the other hints are not, so typing stays quiet.
-  const announce = noPlace || quote?.state === "same" ? hint : "";
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -255,7 +147,7 @@ export default function BookingForm() {
   }
 
   return (
-    <section id="book" ref={sectionRef} className="section bg-linear-to-b from-brand-50/60 to-page
+    <section id="book" className="section bg-linear-to-b from-brand-50/60 to-page
       dark:from-navy-800 dark:to-navy-900">
       <div className="container-page">
         <div className="max-w-3xl mx-auto text-center">
@@ -303,6 +195,46 @@ export default function BookingForm() {
             </div>
           ) : (
             <form onSubmit={onSubmit} className="grid gap-5 sm:grid-cols-2" noValidate>
+              <div className="sm:col-span-1">
+                <LocationAutocomplete
+                  id="pickupLocation"
+                  label={
+                    <>
+                      Pickup location <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
+                    </>
+                  }
+                  placeholder="Home address, hospital, hotel, landmark…"
+                  value={pickup}
+                  onChange={(v) => typePoint("pickup", v)}
+                />
+              </div>
+
+              <div className="sm:col-span-1">
+                <LocationAutocomplete
+                  id="dropoffLocation"
+                  label={
+                    <>
+                      Drop-off location <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
+                    </>
+                  }
+                  placeholder="Destination"
+                  value={dropoff}
+                  onChange={(v) => typePoint("dropoff", v)}
+                />
+              </div>
+
+              {LOCATIONIQ_TOKEN && (
+                <p className="sm:col-span-2 -mt-2">
+                  <a
+                    href="#quote"
+                    className="inline-flex min-h-[48px] items-center font-semibold text-brand-800 underline underline-offset-2 decoration-2
+                      hover:decoration-gold-500 dark:text-brand-300 dark:hover:decoration-gold-400"
+                  >
+                    Change these on the map
+                  </a>
+                </p>
+              )}
+
               <div className="sm:col-span-1">
                 <label htmlFor="name" className="field-label">
                   Full name <span className="text-alert-700 dark:text-alert-300" aria-hidden>*</span>
@@ -355,80 +287,6 @@ export default function BookingForm() {
                 </label>
                 <input id="pickupTime" name="pickupTime" type="time" className="field-input" />
               </div>
-
-              <div className="sm:col-span-1">
-                <LocationAutocomplete
-                  id="pickupLocation"
-                  name="pickupLocation"
-                  label={
-                    <>
-                      Pickup location <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
-                    </>
-                  }
-                  placeholder="Home address, hospital, hotel, landmark…"
-                  value={pickup}
-                  onChange={(v) => typePoint("pickup", v)}
-                />
-              </div>
-
-              <div className="sm:col-span-1">
-                <LocationAutocomplete
-                  id="dropoffLocation"
-                  name="dropoffLocation"
-                  label={
-                    <>
-                      Drop-off location <span className="text-navy-700 font-normal dark:text-mist-100/70">(optional)</span>
-                    </>
-                  }
-                  placeholder="Destination"
-                  value={dropoff}
-                  onChange={(v) => typePoint("dropoff", v)}
-                />
-              </div>
-
-              {LOCATIONIQ_TOKEN && (
-                <div
-                  role="group"
-                  aria-labelledby="fare-map-label"
-                  aria-describedby="fare-map-hint"
-                  className="sm:col-span-2"
-                >
-                  <p id="fare-map-label" className="field-label">
-                    Or pick both places on the map
-                  </p>
-                  {!mapFailed && (
-                    <p id="fare-map-hint" className="mb-3 text-base text-navy-700 dark:text-mist-100/85">
-                      {hint}
-                    </p>
-                  )}
-                  <div className="h-80 sm:h-[420px] overflow-hidden rounded-xl border-2 border-navy-600/40 bg-mist-100
-                    dark:border-navy-700 dark:bg-navy-900">
-                    {mapFailed ? (
-                      <p id="fare-map-hint" className="flex h-full items-center justify-center p-6 text-center text-base text-navy-700 dark:text-mist-100/85">
-                        The map didn&apos;t load. You can still type your pickup and drop-off above.
-                      </p>
-                    ) : (
-                      FareMap && (
-                        <FareMap
-                          pickup={pickup}
-                          dropoff={dropoff}
-                          route={quote?.state === "ok" ? quote.line : null}
-                          onPick={mapPick}
-                          onFail={() => setMapFailed(true)}
-                        />
-                      )
-                    )}
-                  </div>
-                  <p className="sr-only" aria-live="polite">
-                    {announce}
-                  </p>
-                  {!mapFailed && (hasPickup || hasDropoff) && (
-                    <button type="button" onClick={clearPins} className="btn-secondary mt-3 w-full sm:w-auto">
-                      Clear map pins
-                    </button>
-                  )}
-                </div>
-              )}
 
               <div className="sm:col-span-1">
                 <label htmlFor="serviceType" className="field-label">
@@ -528,30 +386,13 @@ export default function BookingForm() {
                 </div>
               )}
 
-              {LOCATIONIQ_TOKEN && (
-                // Always in the DOM so screen readers announce what arrives in it.
+              {LOCATIONIQ_TOKEN && quote && quote.state !== "same" && (
+                // Not a live region: RideQuoteProvider announces the fare once for the page.
                 <div
-                  aria-live="polite"
                   className="sm:col-span-2 rounded-xl border-2 border-brand-700/40 bg-brand-50 px-4 py-3 text-base text-navy-800
-                    empty:border-0 empty:p-0 dark:border-sky-500/50 dark:bg-navy-900 dark:text-mist-100"
+                    dark:border-sky-500/50 dark:bg-navy-900 dark:text-mist-100"
                 >
-                  {quote?.state === "working" && <p>Working out your fare…</p>}
-                  {quote?.state === "failed" && (
-                    <p>
-                      We couldn&apos;t work out a fare just now. Send your request and we&apos;ll confirm your fare
-                      when we call.
-                    </p>
-                  )}
-                  {quote?.state === "ok" && (
-                    <>
-                      <p className="text-xl sm:text-2xl font-bold text-navy-900 dark:text-mist-100">
-                        Estimated fare: ${quote.fare} BBD
-                      </p>
-                      <p className="mt-1">
-                        {quote.km.toFixed(1)} km by road. We&apos;ll confirm the final fare when we call.
-                      </p>
-                    </>
-                  )}
+                  <FareSummary quote={quote} />
                 </div>
               )}
 

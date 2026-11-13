@@ -1,8 +1,9 @@
 "use client";
 
-// The only file that imports Leaflet. BookingForm loads it with a dynamic
-// import() when the booking section nears the viewport, so no Leaflet code,
-// CSS or tile request happens before that.
+// The only file that imports Leaflet. The hero's quote card (FareQuote) loads it
+// with a dynamic import() only when the customer presses "Pick places on the map"
+// or chooses a typed suggestion, so no Leaflet code, CSS or tile request happens
+// before that.
 import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -83,7 +84,7 @@ export default function FareMap({ pickup, dropoff, route, onPick, onFail }: Fare
     };
   }, []);
 
-  // Pins follow the field values. BookingForm passes a fresh object to put a
+  // Pins follow the field values. RideQuoteProvider passes a fresh object to put a
   // pin back when a drag lands where no address is found.
   useEffect(() => {
     const m = map.current;

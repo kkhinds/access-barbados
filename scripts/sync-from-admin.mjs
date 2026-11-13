@@ -53,9 +53,9 @@ try {
   if (!data?.contact || !Array.isArray(data?.services)) {
     throw new Error("malformed sync response (missing contact or services)");
   }
-  const perKmBbd = data.fare?.perKmBbd;
-  if (typeof perKmBbd !== "number" || !(perKmBbd > 0)) {
-    throw new Error("malformed sync response (fare.perKmBbd missing or not above 0)");
+  const perMileBbd = data.fare?.perMileBbd;
+  if (typeof perMileBbd !== "number" || !(perMileBbd > 0)) {
+    throw new Error("malformed sync response (fare.perMileBbd missing or not above 0)");
   }
 
   await mkdir(libDir, { recursive: true });
@@ -70,10 +70,10 @@ try {
     "utf8",
   );
 
-  await writeFile(join(libDir, "fare.json"), JSON.stringify({ perKmBbd }) + "\n", "utf8");
+  await writeFile(join(libDir, "fare.json"), JSON.stringify({ perMileBbd }) + "\n", "utf8");
 
   console.log(
-    `[sync] Wrote lib/contact.json, lib/services.json (${data.services.length} services), lib/fare.json ($${perKmBbd}/km).`,
+    `[sync] Wrote lib/contact.json, lib/services.json (${data.services.length} services), lib/fare.json ($${perMileBbd}/mile).`,
   );
 } catch (err) {
   console.error("[sync] Failed:", err instanceof Error ? err.message : err);
