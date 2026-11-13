@@ -23,16 +23,17 @@ type Suggestion = {
  * Barbados-only place-autocomplete input wired to LocationIQ.
  * Falls back to a plain text input when the token isn't configured.
  *
- * The component holds its own state and pushes a { name, lat, lng } object
- * to the parent via onChange. Hidden inputs are emitted for plain <form>
- * submission too, named `${name}Lat` and `${name}Lng`.
+ * Controlled: the parent owns the { name, lat, lng } value, so the fare map
+ * can fill the field too. Typing clears lat/lng until a suggestion is chosen.
+ * Hidden inputs are emitted for plain <form> submission too, named
+ * `${name}Lat` and `${name}Lng`.
  */
 export default function LocationAutocomplete({
   id,
   name,
   label,
   placeholder,
-  initial,
+  value,
   required,
   onChange,
   className = "",
@@ -41,25 +42,17 @@ export default function LocationAutocomplete({
   name: string;
   label: React.ReactNode;
   placeholder?: string;
-  initial?: LocationValue | null;
+  value: LocationValue;
   required?: boolean;
-  onChange?: (v: LocationValue) => void;
+  onChange: (v: LocationValue) => void;
   className?: string;
 }) {
   const token = process.env.NEXT_PUBLIC_LOCATIONIQ_TOKEN ?? "";
-  const [value, setValue] = useState<string>(initial?.name ?? "");
-  const [lat, setLat] = useState<number | null>(initial?.lat ?? null);
-  const [lng, setLng] = useState<number | null>(initial?.lng ?? null);
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [open, setOpen] = useState(false);
   const [hi, setHi] = useState(-1);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    onChange?.({ name: value, lat, lng });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value, lat, lng]);
 
   // aria-activedescendant moves the highlight without moving DOM focus, so the
   // list will not scroll on its own.
@@ -93,9 +86,7 @@ export default function LocationAutocomplete({
   }
 
   function handleInput(next: string) {
-    setValue(next);
-    setLat(null);
-    setLng(null);
+    onChange({ name: next, lat: null, lng: null });
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => fetchSuggestions(next), 250);
   }
@@ -104,9 +95,7 @@ export default function LocationAutocomplete({
     const placeName = s.display_place
       ? `${s.display_place}${s.display_address ? `, ${s.display_address}` : ""}`
       : s.display_name;
-    setValue(placeName);
-    setLat(parseFloat(s.lat));
-    setLng(parseFloat(s.lon));
+    onChange({ name: placeName, lat: parseFloat(s.lat), lng: parseFloat(s.lon) });
     setOpen(false);
     setSuggestions([]);
   }
@@ -136,9 +125,9 @@ export default function LocationAutocomplete({
         id={id}
         name={name}
         required={required}
-        value={value}
+        value={value.name}
         onChange={(e) => handleInput(e.target.value)}
-        onFocus={() => value.length >= 2 && suggestions.length > 0 && setOpen(true)}
+        onFocus={() => value.name.length >= 2 && suggestions.length > 0 && setOpen(true)}
         onKeyDown={onKeyDown}
         autoComplete="off"
         className="field-input"
@@ -184,8 +173,8 @@ export default function LocationAutocomplete({
         </ul>
       )}
 
-      <input type="hidden" name={`${name}Lat`} value={lat ?? ""} readOnly />
-      <input type="hidden" name={`${name}Lng`} value={lng ?? ""} readOnly />
+      <input type="hidden" name={`${name}Lat`} value={value.lat ?? ""} readOnly />
+      <input type="hidden" name={`${name}Lng`} value={value.lng ?? ""} readOnly />
     </div>
   );
 }

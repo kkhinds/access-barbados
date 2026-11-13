@@ -273,3 +273,90 @@
     }
   }
 }
+
+/* Fare map (components/FareMap.tsx). Left out of any layer, and one class more
+   specific than leaflet.css, because that sheet loads later with the map. */
+.fare-map.leaflet-container {
+  font: inherit;
+  background: var(--color-mist-100);
+}
+/* The frame clips overflow, so the ring sits inside the map edge. */
+.fare-map.leaflet-container:focus-visible {
+  outline-offset: -5px;
+}
+.fare-map.leaflet-container .leaflet-bar {
+  border: 2px solid var(--color-navy-600);
+  border-radius: 0.75rem;
+  box-shadow: none;
+}
+/* 48px zoom targets. */
+.fare-map.leaflet-container .leaflet-bar a {
+  width: 48px;
+  height: 48px;
+  line-height: 48px;
+  font-size: 1.5rem;
+  color: var(--color-navy-900);
+  background: #fff;
+}
+.fare-map.leaflet-container .leaflet-bar a:first-child {
+  border-radius: 0.6rem 0.6rem 0 0;
+}
+.fare-map.leaflet-container .leaflet-bar a:last-child {
+  border-radius: 0 0 0.6rem 0.6rem;
+}
+.fare-map.leaflet-container .leaflet-bar a:hover {
+  background: var(--color-brand-50);
+}
+.fare-map.leaflet-container .leaflet-bar a:focus-visible {
+  outline-offset: -5px;
+}
+.fare-map.leaflet-container .leaflet-control-attribution {
+  font-size: 0.75rem;
+  color: var(--color-navy-900);
+  background: rgb(255 255 255 / 0.92);
+}
+.fare-map.leaflet-container .leaflet-control-attribution a {
+  color: var(--color-brand-800);
+  text-decoration: underline;
+}
+/* Pins are told apart by their letters, not colour alone. */
+.fare-map .fare-pin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #fff;
+  border-radius: 9999px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--color-brand-700);
+  box-shadow: 0 2px 8px rgb(11 29 58 / 0.45);
+}
+.fare-map .fare-pin-b {
+  color: var(--color-gold-400);
+  background: var(--color-navy-900);
+}
+
+@media (prefers-color-scheme: dark) {
+  .fare-map.leaflet-container {
+    background: var(--color-navy-900);
+  }
+  .fare-map.leaflet-container .leaflet-bar {
+    border-color: var(--color-navy-500);
+  }
+  .fare-map.leaflet-container .leaflet-bar a {
+    color: var(--color-mist-100);
+    background: var(--color-navy-800);
+    border-bottom-color: var(--color-navy-500);
+  }
+  .fare-map.leaflet-container .leaflet-bar a:hover {
+    background: var(--color-navy-700);
+  }
+  .fare-map.leaflet-container .leaflet-control-attribution {
+    color: var(--color-mist-100);
+    background: rgb(11 29 58 / 0.9);
+  }
+  .fare-map.leaflet-container .leaflet-control-attribution a {
+    color: var(--color-sky-300);
+  }
+}
